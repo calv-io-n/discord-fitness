@@ -1,0 +1,28 @@
+{
+  "name": "discord-fitness",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "mcp": "bun run src/mcp-server/run.ts",
+    "dashboard": "bun run src/dashboard/run.ts",
+    "frontend": "cd frontend && bunx vite",
+    "dev": "bun run dashboard & cd frontend && bunx vite",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/js-yaml": "^4.0.9",
+    "@types/papaparse": "^5.5.2",
+    "shadcn": "^4.1.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.28.0",
+    "elysia": "^1.4.28",
+    "js-yaml": "^4.1.1",
+    "papaparse": "^5.5.3"
+  }
+}

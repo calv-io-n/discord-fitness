@@ -1,0 +1,153 @@
+<h2>Nutrition Page Layout</h2>
+<p class="subtitle">Daily macros, weekly tracking, on-track projection, food log — how should this be organized?</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Dashboard Cards + Food Log Below</h3>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-body" style="padding:16px">
+          <!-- Top row: daily summary -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px">
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="font-size:10px;color:#888;text-transform:uppercase">Calories</div>
+              <div style="font-size:22px;font-weight:700;margin-top:2px">1,847</div>
+              <div style="font-size:11px;color:#666">/ 2,500 daily</div>
+              <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:74%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+            </div>
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="font-size:10px;color:#888;text-transform:uppercase">Protein</div>
+              <div style="font-size:22px;font-weight:700;margin-top:2px">142g</div>
+              <div style="font-size:11px;color:#666">/ 180g target</div>
+              <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:79%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+            </div>
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="font-size:10px;color:#888;text-transform:uppercase">Carbs</div>
+              <div style="font-size:22px;font-weight:700;margin-top:2px">198g</div>
+              <div style="font-size:11px;color:#666">/ 250g target</div>
+              <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:79%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+            </div>
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="font-size:10px;color:#888;text-transform:uppercase">Fat</div>
+              <div style="font-size:22px;font-weight:700;margin-top:2px">62g</div>
+              <div style="font-size:11px;color:#666">/ 80g target</div>
+              <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:78%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+            </div>
+          </div>
+          <!-- Weekly row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="font-size:10px;color:#888;text-transform:uppercase">Weekly Calories</div>
+              <div style="display:flex;align-items:baseline;gap:8px;margin-top:2px">
+                <div style="font-size:22px;font-weight:700">12,450</div>
+                <div style="font-size:11px;color:#666">/ 17,500 target</div>
+              </div>
+              <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:71%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+              <div style="font-size:11px;color:#22c55e;margin-top:6px">✓ On track — 5,050 remaining over 3 days</div>
+            </div>
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="font-size:10px;color:#888;text-transform:uppercase">Weekly Projection</div>
+              <div style="display:flex;align-items:baseline;gap:8px;margin-top:2px">
+                <div style="font-size:22px;font-weight:700">~17,200</div>
+                <div style="font-size:11px;color:#22c55e">Under by ~300</div>
+              </div>
+              <div style="font-size:11px;color:#888;margin-top:8px">Based on 4-day average of 1,780 cal/day</div>
+            </div>
+          </div>
+          <!-- Food log -->
+          <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+            <div style="font-size:12px;font-weight:600;margin-bottom:10px">Today's Food Log</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #222">
+                <span>Breakfast — Eggs & toast</span>
+                <span style="color:#888">420 cal · 28g P</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #222">
+                <span>Lunch — Chicken bowl</span>
+                <span style="color:#888">680 cal · 52g P</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #222">
+                <span>Snack — Protein shake</span>
+                <span style="color:#888">280 cal · 35g P</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0">
+                <span>Dinner — Salmon + rice</span>
+                <span style="color:#888">467 cal · 27g P</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:8px;font-size:13px;color:#aaa">Everything on one scroll. Macro cards at top, weekly tracking mid, food log at bottom. Dense but scannable.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Two-Column: Metrics Left, Food Log Right</h3>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-body" style="padding:16px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <!-- Left: metrics -->
+            <div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+                <div style="background:#1a1a2e;border-radius:8px;padding:12px;border:1px solid #333">
+                  <div style="font-size:10px;color:#888;text-transform:uppercase">Calories</div>
+                  <div style="font-size:20px;font-weight:700">1,847 <span style="font-size:12px;color:#666">/ 2,500</span></div>
+                  <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:74%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+                </div>
+                <div style="background:#1a1a2e;border-radius:8px;padding:12px;border:1px solid #333">
+                  <div style="font-size:10px;color:#888;text-transform:uppercase">Protein</div>
+                  <div style="font-size:20px;font-weight:700">142g <span style="font-size:12px;color:#666">/ 180g</span></div>
+                  <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:79%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+                </div>
+                <div style="background:#1a1a2e;border-radius:8px;padding:12px;border:1px solid #333">
+                  <div style="font-size:10px;color:#888;text-transform:uppercase">Carbs</div>
+                  <div style="font-size:20px;font-weight:700">198g <span style="font-size:12px;color:#666">/ 250g</span></div>
+                  <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:79%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+                </div>
+                <div style="background:#1a1a2e;border-radius:8px;padding:12px;border:1px solid #333">
+                  <div style="font-size:10px;color:#888;text-transform:uppercase">Fat</div>
+                  <div style="font-size:20px;font-weight:700">62g <span style="font-size:12px;color:#666">/ 80g</span></div>
+                  <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:78%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+                </div>
+              </div>
+              <!-- Weekly -->
+              <div style="background:#1a1a2e;border-radius:8px;padding:12px;border:1px solid #333">
+                <div style="font-size:10px;color:#888;text-transform:uppercase">Weekly Calories</div>
+                <div style="font-size:20px;font-weight:700;margin-top:2px">12,450 <span style="font-size:12px;color:#666">/ 17,500</span></div>
+                <div style="height:4px;background:#333;border-radius:2px;margin-top:6px"><div style="width:71%;height:100%;background:#22c55e;border-radius:2px"></div></div>
+                <div style="font-size:11px;color:#22c55e;margin-top:6px">✓ On track — avg 1,780/day</div>
+              </div>
+            </div>
+            <!-- Right: food log -->
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="font-size:12px;font-weight:600;margin-bottom:10px">Today's Food Log</div>
+              <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+                <div style="padding:8px;background:#151530;border-radius:6px">
+                  <div style="font-weight:500">Breakfast</div>
+                  <div style="color:#888;margin-top:2px">Eggs & toast — 420 cal · 28g P</div>
+                </div>
+                <div style="padding:8px;background:#151530;border-radius:6px">
+                  <div style="font-weight:500">Lunch</div>
+                  <div style="color:#888;margin-top:2px">Chicken bowl — 680 cal · 52g P</div>
+                </div>
+                <div style="padding:8px;background:#151530;border-radius:6px">
+                  <div style="font-weight:500">Snack</div>
+                  <div style="color:#888;margin-top:2px">Protein shake — 280 cal · 35g P</div>
+                </div>
+                <div style="padding:8px;background:#151530;border-radius:6px">
+                  <div style="font-weight:500">Dinner</div>
+                  <div style="color:#888;margin-top:2px">Salmon + rice — 467 cal · 27g P</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:8px;font-size:13px;color:#aaa">Side-by-side: metrics and food log visible at the same time without scrolling. Collapses to stacked on mobile.</p>
+    </div>
+  </div>
+</div>
