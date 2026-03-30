@@ -9,6 +9,7 @@ import {
 import { handleLogTool, handleLogBatch, LOG_TOOL_NAMES, type BatchEntry } from "./tools/logging";
 import { handleQueryDomain, handleGetToday, handleGetSummary } from "./tools/querying";
 import { handleGetTargets, handleUpdateTargets } from "./tools/targets";
+import { getFavoriteFoods, addFavoriteFood, type FavoriteFood } from "./tools/favorites";
 import { readFileSync } from "fs";
 
 export function createServer(dataDir: string = "data", targetsPath: string = "targets.yaml") {
@@ -172,6 +173,32 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
         },
       },
       {
+        name: "get_favorite_foods",
+        description: "Look up favorite/saved foods and their macros. Use when the user asks 'what are my saved foods', 'look up chicken breast', or needs macro info for a food they've saved before. Supports optional search query to filter by name.",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            query: { type: "string", description: "Optional search term to filter foods by name" },
+          },
+        },
+      },
+      {
+        name: "add_favorite_food",
+        description: "Save a food with its serving size and macros to the favorites list. Use when the user says 'save this food', 'add to my favorites', or wants to remember a food's macros for quick logging later.",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            name: { type: "string", description: "Food name, e.g. chicken breast" },
+            serving: { type: "string", description: "Serving size, e.g. 100g, 1 slice, 1 cup" },
+            calories: { type: "number" },
+            protein: { type: "number", description: "Protein in grams" },
+            carbs: { type: "number", description: "Carbs in grams" },
+            fat: { type: "number", description: "Fat in grams" },
+          },
+          required: ["name", "serving", "calories", "protein", "carbs", "fat"],
+        },
+      },
+      {
         name: "log_batch",
         description: "PREFERRED: Log multiple fitness entries across any domains in a single call. Use this instead of calling individual log tools when the user wants to log more than one thing (e.g., 'log my workout, steps, and breakfast'). Each entry specifies a domain (strength/cardio/steps/nutrition/sleep/weight) and the data for that entry.",
         inputSchema: {
@@ -222,6 +249,18 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
 
     if (name === "get_summary") {
       const result = handleGetSummary(args as { domain: string; from?: string; to?: string }, dataDir);
+      return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
+    }
+
+    if (name === "get_favorite_foods") {
+      const { query } = args as { query?: string };
+      const foods = getFavoriteFoods(dataDir, query);
+      return { content: [{ type: "text" as const, text: JSON.stringify({ foods, count: foods.length }) }] };
+    }
+
+    if (name === "add_favorite_food") {
+      const food = args as FavoriteFood;
+      const result = addFavoriteFood(food, dataDir);
       return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
     }
 
