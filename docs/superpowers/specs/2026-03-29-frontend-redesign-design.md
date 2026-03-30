@@ -78,8 +78,12 @@ Replace the current vanilla JS fitness dashboard with a React SPA using Vite, sh
      - Yellow dash = plateau (same weight)
      - Red down arrow + delta = regressing
    - Click row to expand: shows session history for that lift
+4. **Monthly Summary Subview** (tab or toggle alongside main view):
+   - Month-over-month total volume per PPL category (bar chart)
+   - Progressive overload trend per exercise across months (did your best set improve month to month?)
+   - Fetches multiple months of data to compare
 
-**API calls**: `GET /api/strength/{year}/{month}`, `GET /api/targets`
+**API calls**: `GET /api/strength/{year}/{month}` (multiple months for summary), `GET /api/targets`
 
 ### 3. Steps (`/steps`)
 
@@ -103,12 +107,13 @@ Replace the current vanilla JS fitness dashboard with a React SPA using Vite, sh
 **Layout**:
 
 1. **Summary Card**: Current weight, target weight, remaining to lose, rate of loss (lbs/week from trend)
-2. **Weight Chart** (line chart):
-   - Individual weigh-in data points
-   - 7-day moving average trend line overlaid
-   - Target weight horizontal line
+2. **Time Range Toggle**: "This Month" | "This Year"
+   - **This Month**: Daily weigh-in data points with 7-day moving average trend line, target weight horizontal line
+   - **This Year**: Monthly average weight per month (12 data points), trend line across the year, target weight horizontal line — shows the big-picture fat loss arc
+3. **Weight Chart** (line chart, changes based on toggle):
+   - Data points + trend line + target line
 
-**API calls**: `GET /api/weight/{year}/{month}`, `GET /api/targets`
+**API calls**: `GET /api/weight/{year}/{month}` (single month or all 12 for yearly), `GET /api/targets`
 
 ### 5. Stretching (`/stretching`)
 
