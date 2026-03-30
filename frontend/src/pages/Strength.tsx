@@ -187,7 +187,7 @@ export default function Strength() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-zinc-500">
+      <div className="flex items-center justify-center h-64 text-[#8b8fa3]">
         Loading...
       </div>
     );
@@ -206,8 +206,8 @@ export default function Strength() {
             onClick={() => setView("current")}
             className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               view === "current"
-                ? "bg-zinc-100 text-zinc-900"
-                : "text-zinc-400 hover:text-zinc-200"
+                ? "bg-white/10 text-white"
+                : "text-[#a0a4b8] hover:text-white"
             }`}
           >
             Current Month
@@ -216,8 +216,8 @@ export default function Strength() {
             onClick={() => setView("summary")}
             className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               view === "summary"
-                ? "bg-zinc-100 text-zinc-900"
-                : "text-zinc-400 hover:text-zinc-200"
+                ? "bg-white/10 text-white"
+                : "text-[#a0a4b8] hover:text-white"
             }`}
           >
             Monthly Summary
@@ -228,9 +228,9 @@ export default function Strength() {
       {view === "current" ? (
         <div className="space-y-6">
           {/* Monthly Workout Heatmap */}
-          <Card className="bg-zinc-900 border-zinc-800">
+          <Card className="bg-[#12131a] border-[#1e2030]">
             <CardHeader>
-              <CardTitle className="text-sm font-medium text-zinc-400">
+              <CardTitle className="text-sm font-medium text-[#a0a4b8]">
                 Workout Volume Heatmap
               </CardTitle>
             </CardHeader>
@@ -245,7 +245,7 @@ export default function Strength() {
           </Card>
 
           {/* PPL Filter Tabs + Exercise Table */}
-          <Card className="bg-zinc-900 border-zinc-800">
+          <Card className="bg-[#12131a] border-[#1e2030]">
             <CardContent className="pt-6">
               <Tabs defaultValue="all">
                 <TabsList>
@@ -282,39 +282,39 @@ export default function Strength() {
       ) : (
         <div className="space-y-6">
           {/* Monthly Summary View */}
-          <Card className="bg-zinc-900 border-zinc-800">
+          <Card className="bg-[#12131a] border-[#1e2030]">
             <CardHeader>
-              <CardTitle className="text-sm font-medium text-zinc-400">
+              <CardTitle className="text-sm font-medium text-[#a0a4b8]">
                 Volume by Category (Last 6 Months)
               </CardTitle>
             </CardHeader>
             <CardContent>
               {summaryLoading ? (
-                <div className="flex items-center justify-center h-64 text-zinc-500">
+                <div className="flex items-center justify-center h-64 text-[#8b8fa3]">
                   Loading...
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height={350}>
                   <BarChart data={summaryData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                     <XAxis
                       dataKey="month"
-                      tick={{ fill: "#71717a", fontSize: 12 }}
-                      axisLine={{ stroke: "#27272a" }}
-                      tickLine={{ stroke: "#27272a" }}
+                      tick={{ fill: "#6b6f85", fontSize: 12 }}
+                      axisLine={{ stroke: "#1e2030" }}
+                      tickLine={{ stroke: "#1e2030" }}
                     />
                     <YAxis
-                      tick={{ fill: "#71717a", fontSize: 12 }}
-                      axisLine={{ stroke: "#27272a" }}
-                      tickLine={{ stroke: "#27272a" }}
+                      tick={{ fill: "#6b6f85", fontSize: 12 }}
+                      axisLine={{ stroke: "#1e2030" }}
+                      tickLine={{ stroke: "#1e2030" }}
                       tickFormatter={(v) =>
                         v >= 1000 ? `${(v / 1000).toFixed(0)}k` : String(v)
                       }
                     />
                     <Tooltip
                       contentStyle={{
-                        backgroundColor: "#18181b",
-                        border: "1px solid #27272a",
+                        backgroundColor: "#12131a",
+                        border: "1px solid #1e2030",
                         borderRadius: "8px",
                         color: "#e4e4e7",
                       }}
@@ -365,7 +365,7 @@ function ExerciseTable({
 }) {
   if (stats.length === 0) {
     return (
-      <p className="text-sm text-zinc-600 py-4 text-center">
+      <p className="text-sm text-[#6b6f85] py-4 text-center">
         No exercises logged this month.
       </p>
     );
@@ -374,25 +374,25 @@ function ExerciseTable({
   return (
     <Table>
       <TableHeader>
-        <TableRow className="border-zinc-800">
-          <TableHead className="text-zinc-500">Exercise</TableHead>
-          <TableHead className="text-zinc-500">Category</TableHead>
-          <TableHead className="text-right text-zinc-500">Last</TableHead>
-          <TableHead className="text-right text-zinc-500">Best</TableHead>
-          <TableHead className="text-right text-zinc-500">Trend</TableHead>
+        <TableRow className="border-[#1e2030]">
+          <TableHead className="text-[#8b8fa3]">Exercise</TableHead>
+          <TableHead className="text-[#8b8fa3]">Category</TableHead>
+          <TableHead className="text-right text-[#8b8fa3]">Last</TableHead>
+          <TableHead className="text-right text-[#8b8fa3]">Best</TableHead>
+          <TableHead className="text-right text-[#8b8fa3]">Trend</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {stats.map((s) => (
           <Fragment key={s.exercise}>
             <TableRow
-              className="border-zinc-800 cursor-pointer hover:bg-zinc-800/50"
+              className="border-[#1e2030] cursor-pointer hover:bg-white/[0.04]"
               onClick={() => onToggleExpand(s.exercise)}
             >
               <TableCell className="font-medium">{s.exercise}</TableCell>
               <TableCell>
-                <span className="inline-block rounded bg-zinc-800 px-2 py-0.5 text-xs text-zinc-400 capitalize">
-                  {s.category || "—"}
+                <span className="inline-block rounded bg-[#1a1b2e] px-2 py-0.5 text-xs text-[#a0a4b8] capitalize">
+                  {s.category || "\u2014"}
                 </span>
               </TableCell>
               <TableCell className="text-right">
@@ -406,17 +406,17 @@ function ExerciseTable({
               </TableCell>
             </TableRow>
             {expandedExercise === s.exercise && (
-              <TableRow className="border-zinc-800">
-                <TableCell colSpan={5} className="bg-zinc-950/50 p-0">
+              <TableRow className="border-[#1e2030]">
+                <TableCell colSpan={5} className="bg-[#0c0d14] p-0">
                   <div className="px-4 py-3">
-                    <p className="text-xs text-zinc-500 mb-2 font-medium uppercase tracking-wide">
+                    <p className="text-xs text-[#8b8fa3] mb-2 font-medium uppercase tracking-wide">
                       Session History
                     </p>
                     <div className="space-y-1">
                       {s.sessions.map((sess, i) => (
                         <div
                           key={i}
-                          className="flex justify-between text-sm text-zinc-400"
+                          className="flex justify-between text-sm text-[#a0a4b8]"
                         >
                           <span>{sess.date}</span>
                           <span>

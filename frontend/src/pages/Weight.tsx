@@ -62,7 +62,7 @@ export default function Weight() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-zinc-500">
+      <div className="flex items-center justify-center h-64 text-[#8b8fa3]">
         Loading...
       </div>
     );
@@ -122,8 +122,8 @@ export default function Weight() {
             onClick={() => setRange("month")}
             className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               range === "month"
-                ? "bg-zinc-100 text-zinc-900"
-                : "text-zinc-400 hover:text-zinc-200"
+                ? "bg-white/10 text-white"
+                : "text-[#a0a4b8] hover:text-white"
             }`}
           >
             This Month
@@ -132,8 +132,8 @@ export default function Weight() {
             onClick={() => setRange("year")}
             className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
               range === "year"
-                ? "bg-zinc-100 text-zinc-900"
-                : "text-zinc-400 hover:text-zinc-200"
+                ? "bg-white/10 text-white"
+                : "text-[#a0a4b8] hover:text-white"
             }`}
           >
             This Year
@@ -145,18 +145,18 @@ export default function Weight() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <MetricCard
           label="Current Weight"
-          value={currentWeight || "—"}
+          value={currentWeight || "\u2014"}
           unit="lbs"
         />
         <MetricCard
           label="Target Weight"
-          value={targetWeight || "—"}
+          value={targetWeight || "\u2014"}
           unit="lbs"
           subtitle={toGoLbs > 0 ? `${toGoLbs} lbs to go` : undefined}
         />
         <MetricCard
           label="Rate of Loss"
-          value={ratePerWeek || "—"}
+          value={ratePerWeek || "\u2014"}
           unit="lbs/week"
           subtitle={
             ratePerWeek > 0
@@ -169,9 +169,9 @@ export default function Weight() {
       </div>
 
       {/* Weight Chart */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-[#12131a] border-[#1e2030]">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">
+          <CardTitle className="text-sm font-medium text-[#a0a4b8]">
             {range === "month" ? "Daily Weigh-ins" : "Monthly Averages"}
           </CardTitle>
         </CardHeader>
@@ -179,23 +179,23 @@ export default function Weight() {
           {range === "month" ? (
             <ResponsiveContainer width="100%" height={350}>
               <LineChart data={monthChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fill: "#71717a", fontSize: 12 }}
-                  axisLine={{ stroke: "#27272a" }}
-                  tickLine={{ stroke: "#27272a" }}
+                  tick={{ fill: "#6b6f85", fontSize: 12 }}
+                  axisLine={{ stroke: "#1e2030" }}
+                  tickLine={{ stroke: "#1e2030" }}
                 />
                 <YAxis
                   domain={["dataMin - 2", "dataMax + 2"]}
-                  tick={{ fill: "#71717a", fontSize: 12 }}
-                  axisLine={{ stroke: "#27272a" }}
-                  tickLine={{ stroke: "#27272a" }}
+                  tick={{ fill: "#6b6f85", fontSize: 12 }}
+                  axisLine={{ stroke: "#1e2030" }}
+                  tickLine={{ stroke: "#1e2030" }}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
+                    backgroundColor: "#12131a",
+                    border: "1px solid #1e2030",
                     borderRadius: "8px",
                     color: "#e4e4e7",
                   }}
@@ -237,23 +237,23 @@ export default function Weight() {
           ) : (
             <ResponsiveContainer width="100%" height={350}>
               <LineChart data={yearChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fill: "#71717a", fontSize: 12 }}
-                  axisLine={{ stroke: "#27272a" }}
-                  tickLine={{ stroke: "#27272a" }}
+                  tick={{ fill: "#6b6f85", fontSize: 12 }}
+                  axisLine={{ stroke: "#1e2030" }}
+                  tickLine={{ stroke: "#1e2030" }}
                 />
                 <YAxis
                   domain={["dataMin - 5", "dataMax + 5"]}
-                  tick={{ fill: "#71717a", fontSize: 12 }}
-                  axisLine={{ stroke: "#27272a" }}
-                  tickLine={{ stroke: "#27272a" }}
+                  tick={{ fill: "#6b6f85", fontSize: 12 }}
+                  axisLine={{ stroke: "#1e2030" }}
+                  tickLine={{ stroke: "#1e2030" }}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
+                    backgroundColor: "#12131a",
+                    border: "1px solid #1e2030",
                     borderRadius: "8px",
                     color: "#e4e4e7",
                   }}

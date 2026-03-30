@@ -37,7 +37,7 @@ export default function Stretching() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-zinc-500">
+      <div className="flex items-center justify-center h-64 text-[#8b8fa3]">
         Loading...
       </div>
     );
@@ -78,9 +78,9 @@ export default function Stretching() {
       <h1 className="text-2xl font-bold">Stretching</h1>
 
       {/* Monthly Heatmap */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-[#12131a] border-[#1e2030]">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">
+          <CardTitle className="text-sm font-medium text-[#a0a4b8]">
             Monthly Activity
           </CardTitle>
         </CardHeader>
@@ -106,32 +106,32 @@ export default function Stretching() {
       </div>
 
       {/* Log Table */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-[#12131a] border-[#1e2030]">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">
+          <CardTitle className="text-sm font-medium text-[#a0a4b8]">
             Stretching Log
           </CardTitle>
         </CardHeader>
         <CardContent>
           {tableEntries.length === 0 ? (
-            <p className="text-sm text-zinc-600 py-4 text-center">
+            <p className="text-sm text-[#6b6f85] py-4 text-center">
               No stretching logged this month.
             </p>
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="border-zinc-800">
-                  <TableHead className="text-zinc-500">Date</TableHead>
-                  <TableHead className="text-zinc-500">Stretch</TableHead>
-                  <TableHead className="text-right text-zinc-500">
+                <TableRow className="border-[#1e2030]">
+                  <TableHead className="text-[#8b8fa3]">Date</TableHead>
+                  <TableHead className="text-[#8b8fa3]">Stretch</TableHead>
+                  <TableHead className="text-right text-[#8b8fa3]">
                     Duration (min)
                   </TableHead>
-                  <TableHead className="text-zinc-500">Notes</TableHead>
+                  <TableHead className="text-[#8b8fa3]">Notes</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {tableEntries.map((entry, i) => (
-                  <TableRow key={i} className="border-zinc-800">
+                  <TableRow key={i} className="border-[#1e2030]">
                     <TableCell>{entry.date}</TableCell>
                     <TableCell className="font-medium">
                       {entry.stretch}
@@ -139,7 +139,7 @@ export default function Stretching() {
                     <TableCell className="text-right">
                       {entry.duration_min}
                     </TableCell>
-                    <TableCell className="text-zinc-500">
+                    <TableCell className="text-[#8b8fa3]">
                       {entry.notes || "\u2014"}
                     </TableCell>
                   </TableRow>

@@ -50,7 +50,7 @@ export default function Cardio() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-zinc-500">
+      <div className="flex items-center justify-center h-64 text-[#8b8fa3]">
         Loading...
       </div>
     );
@@ -129,43 +129,43 @@ export default function Cardio() {
       </div>
 
       {/* Monthly Bar Chart by type */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-[#12131a] border-[#1e2030]">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">
+          <CardTitle className="text-sm font-medium text-[#a0a4b8]">
             Daily Cardio by Type
           </CardTitle>
         </CardHeader>
         <CardContent>
           {barData.length === 0 ? (
-            <p className="text-sm text-zinc-600 py-4 text-center">
+            <p className="text-sm text-[#6b6f85] py-4 text-center">
               No cardio logged this month.
             </p>
           ) : (
             <ResponsiveContainer width="100%" height={350}>
               <BarChart data={barData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fill: "#71717a", fontSize: 12 }}
-                  axisLine={{ stroke: "#27272a" }}
-                  tickLine={{ stroke: "#27272a" }}
+                  tick={{ fill: "#6b6f85", fontSize: 12 }}
+                  axisLine={{ stroke: "#1e2030" }}
+                  tickLine={{ stroke: "#1e2030" }}
                 />
                 <YAxis
-                  tick={{ fill: "#71717a", fontSize: 12 }}
-                  axisLine={{ stroke: "#27272a" }}
-                  tickLine={{ stroke: "#27272a" }}
+                  tick={{ fill: "#6b6f85", fontSize: 12 }}
+                  axisLine={{ stroke: "#1e2030" }}
+                  tickLine={{ stroke: "#1e2030" }}
                   label={{
                     value: "min",
                     angle: -90,
                     position: "insideLeft",
-                    fill: "#71717a",
+                    fill: "#6b6f85",
                     fontSize: 12,
                   }}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
+                    backgroundColor: "#12131a",
+                    border: "1px solid #1e2030",
                     borderRadius: "8px",
                     color: "#e4e4e7",
                   }}
@@ -196,38 +196,38 @@ export default function Cardio() {
 
       {/* Weekly Volume Trend */}
       {weeklyTrendData.length > 1 && (
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-[#12131a] border-[#1e2030]">
           <CardHeader>
-            <CardTitle className="text-sm font-medium text-zinc-400">
+            <CardTitle className="text-sm font-medium text-[#a0a4b8]">
               Weekly Volume Trend
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
               <LineChart data={weeklyTrendData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                 <XAxis
                   dataKey="week"
-                  tick={{ fill: "#71717a", fontSize: 12 }}
-                  axisLine={{ stroke: "#27272a" }}
-                  tickLine={{ stroke: "#27272a" }}
+                  tick={{ fill: "#6b6f85", fontSize: 12 }}
+                  axisLine={{ stroke: "#1e2030" }}
+                  tickLine={{ stroke: "#1e2030" }}
                 />
                 <YAxis
-                  tick={{ fill: "#71717a", fontSize: 12 }}
-                  axisLine={{ stroke: "#27272a" }}
-                  tickLine={{ stroke: "#27272a" }}
+                  tick={{ fill: "#6b6f85", fontSize: 12 }}
+                  axisLine={{ stroke: "#1e2030" }}
+                  tickLine={{ stroke: "#1e2030" }}
                   label={{
                     value: "min",
                     angle: -90,
                     position: "insideLeft",
-                    fill: "#71717a",
+                    fill: "#6b6f85",
                     fontSize: 12,
                   }}
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#18181b",
-                    border: "1px solid #27272a",
+                    backgroundColor: "#12131a",
+                    border: "1px solid #1e2030",
                     borderRadius: "8px",
                     color: "#e4e4e7",
                   }}

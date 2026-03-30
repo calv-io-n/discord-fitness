@@ -1,5 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface MetricCardProps {
   label: string;
@@ -9,36 +8,39 @@ interface MetricCardProps {
   targetUnit?: string;
   status?: "on-track" | "over" | "neutral";
   subtitle?: string;
+  accent?: string; // tailwind color class for progress bar
 }
 
-export default function MetricCard({ label, value, unit, target, targetUnit, status, subtitle }: MetricCardProps) {
+export default function MetricCard({ label, value, unit, target, targetUnit, status, subtitle, accent }: MetricCardProps) {
   const numValue = typeof value === "number" ? value : 0;
   const pct = target ? Math.min((numValue / target) * 100, 100) : 0;
   const isOver = status === "over" || (target && numValue > target && status !== "on-track");
+  const barColor = isOver ? "bg-rose-500" : accent || "bg-emerald-500";
 
   return (
-    <Card className={`bg-zinc-900 border-zinc-800 ${isOver ? "ring-red-500/30" : ""}`}>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-xs font-medium text-zinc-500 uppercase tracking-wide">
+    <Card className="bg-[#12131a] border-[#1e2030] hover:border-[#2a2c42] transition-colors">
+      <CardContent className="pt-5 pb-4">
+        <p className="text-xs font-semibold text-[#6b6f85] uppercase tracking-wider mb-3">
           {label}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">
-          {value} {unit && <span className="text-sm font-normal text-zinc-500">{unit}</span>}
+        </p>
+        <div className="text-3xl font-bold tracking-tight text-white">
+          {value}
+          {unit && <span className="text-base font-normal text-[#6b6f85] ml-1.5">{unit}</span>}
         </div>
         {target !== undefined && (
           <>
-            <p className="text-xs text-zinc-600 mt-1">
-              Target: {target} {targetUnit || unit}
+            <p className="text-xs text-[#4a4d5e] mt-2">
+              / {target.toLocaleString()} {targetUnit || unit}
             </p>
-            <Progress
-              value={pct}
-              className="mt-2 h-1"
-            />
+            <div className="mt-3 h-1.5 rounded-full bg-[#1a1b2e] overflow-hidden">
+              <div
+                className={`h-full rounded-full ${barColor} transition-all duration-500`}
+                style={{ width: `${pct}%` }}
+              />
+            </div>
           </>
         )}
-        {subtitle && <p className="text-xs mt-2 text-zinc-500">{subtitle}</p>}
+        {subtitle && <p className="text-xs mt-3 text-[#6b6f85]">{subtitle}</p>}
       </CardContent>
     </Card>
   );

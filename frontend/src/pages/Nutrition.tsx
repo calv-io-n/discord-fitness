@@ -45,7 +45,7 @@ export default function Nutrition() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-zinc-500">
+      <div className="flex items-center justify-center h-64 text-[#8b8fa3]">
         Loading...
       </div>
     );
@@ -125,37 +125,37 @@ export default function Nutrition() {
           targetUnit="kcal"
           subtitle={`${daysRemaining} day${daysRemaining !== 1 ? "s" : ""} remaining this week`}
         />
-        <Card className="bg-zinc-900 border-zinc-800">
+        <Card className="bg-[#12131a] border-[#1e2030]">
           <CardHeader className="pb-2">
-            <CardTitle className="text-xs font-medium text-zinc-500 uppercase tracking-wide">
+            <CardTitle className="text-xs font-semibold text-[#6b6f85] uppercase tracking-wider">
               Weekly Projection
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-bold tracking-tight text-white">
               {projectedWeekly.toLocaleString()}{" "}
-              <span className="text-sm font-normal text-zinc-500">kcal</span>
+              <span className="text-base font-normal text-[#6b6f85]">kcal</span>
             </div>
             {weeklyCalTarget > 0 && (
-              <p className="text-xs text-zinc-600 mt-1">
-                Target: {weeklyCalTarget.toLocaleString()} kcal
+              <p className="text-xs text-[#4a4d5e] mt-2">
+                / {weeklyCalTarget.toLocaleString()} kcal
               </p>
             )}
-            <div className="mt-2 flex items-center gap-2">
+            <div className="mt-3 flex items-center gap-2">
               <span
                 className={`inline-block h-2 w-2 rounded-full ${
-                  isOnTrack ? "bg-green-500" : "bg-red-500"
+                  isOnTrack ? "bg-emerald-500" : "bg-rose-500"
                 }`}
               />
               <span
                 className={`text-xs font-medium ${
-                  isOnTrack ? "text-green-400" : "text-red-400"
+                  isOnTrack ? "text-emerald-400" : "text-rose-400"
                 }`}
               >
                 {isOnTrack ? "On track" : "Over target"}
               </span>
             </div>
-            <p className="text-xs mt-2 text-zinc-500">
+            <p className="text-xs mt-3 text-[#6b6f85]">
               Based on avg {Math.round(avgDailyCal).toLocaleString()} kcal/day ({daysElapsed} day{daysElapsed !== 1 ? "s" : ""} logged)
             </p>
           </CardContent>
@@ -163,31 +163,31 @@ export default function Nutrition() {
       </div>
 
       {/* Section 3: Today's Food Log */}
-      <Card className="bg-zinc-900 border-zinc-800">
+      <Card className="bg-[#12131a] border-[#1e2030]">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-zinc-400">
+          <CardTitle className="text-sm font-medium text-[#a0a4b8]">
             Today's Food Log
           </CardTitle>
         </CardHeader>
         <CardContent>
           {todayEntries.length === 0 ? (
-            <p className="text-sm text-zinc-600 py-4 text-center">
+            <p className="text-sm text-[#6b6f85] py-4 text-center">
               No meals logged today.
             </p>
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="border-zinc-800">
-                  <TableHead className="text-zinc-500">Meal</TableHead>
-                  <TableHead className="text-right text-zinc-500">Calories</TableHead>
-                  <TableHead className="text-right text-zinc-500">Protein</TableHead>
-                  <TableHead className="text-right text-zinc-500">Carbs</TableHead>
-                  <TableHead className="text-right text-zinc-500">Fat</TableHead>
+                <TableRow className="border-[#1e2030]">
+                  <TableHead className="text-[#8b8fa3]">Meal</TableHead>
+                  <TableHead className="text-right text-[#8b8fa3]">Calories</TableHead>
+                  <TableHead className="text-right text-[#8b8fa3]">Protein</TableHead>
+                  <TableHead className="text-right text-[#8b8fa3]">Carbs</TableHead>
+                  <TableHead className="text-right text-[#8b8fa3]">Fat</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {todayEntries.map((entry, i) => (
-                  <TableRow key={i} className="border-zinc-800">
+                  <TableRow key={i} className="border-[#1e2030]">
                     <TableCell className="font-medium">{entry.meal}</TableCell>
                     <TableCell className="text-right">{entry.calories}</TableCell>
                     <TableCell className="text-right">{entry.protein}g</TableCell>
@@ -196,7 +196,7 @@ export default function Nutrition() {
                   </TableRow>
                 ))}
               </TableBody>
-              <TableFooter className="border-zinc-800 bg-zinc-800/50">
+              <TableFooter className="border-[#1e2030] bg-[#1a1b2e]/60">
                 <TableRow>
                   <TableCell className="font-bold">Total</TableCell>
                   <TableCell className="text-right font-bold">{todayCals}</TableCell>
