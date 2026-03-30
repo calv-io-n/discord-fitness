@@ -1,0 +1,20 @@
+nutrition:
+  calories: 2500
+  protein_g: 180
+  carbs_g: 280
+  fat_g: 80
+
+strength:
+  bench_press: 225
+  squat: 315
+  deadlift: 405
+
+steps:
+  daily: 10000
+
+sleep:
+  hours: 7.5
+
+weight:
+  target: 180
+  unit: lb
