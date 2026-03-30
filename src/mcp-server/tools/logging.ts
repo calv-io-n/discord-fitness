@@ -33,4 +33,30 @@ export function handleLogTool(
   return { success: true, message: `Logged ${domain} entry for ${(entry as { date: string }).date}` };
 }
 
+export interface BatchEntry {
+  domain: string;
+  data: Record<string, unknown>;
+}
+
+export interface BatchResult {
+  success: boolean;
+  results: LogResult[];
+}
+
+export function handleLogBatch(
+  entries: BatchEntry[],
+  dataDir: string = "data"
+): BatchResult {
+  const results: LogResult[] = [];
+
+  for (const entry of entries) {
+    const toolName = `log_${entry.domain}`;
+    const result = handleLogTool(toolName, entry.data, dataDir);
+    results.push(result);
+  }
+
+  const allSuccess = results.every((r) => r.success);
+  return { success: allSuccess, results };
+}
+
 export const LOG_TOOL_NAMES = Object.keys(TOOL_TO_DOMAIN);
