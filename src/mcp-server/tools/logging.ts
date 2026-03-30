@@ -8,6 +8,7 @@ const TOOL_TO_DOMAIN: Record<string, Domain> = {
   log_nutrition: "nutrition",
   log_sleep: "sleep",
   log_weight: "weight",
+  log_stretching: "stretching",
 };
 
 // Map common field name variations to canonical CSV column names

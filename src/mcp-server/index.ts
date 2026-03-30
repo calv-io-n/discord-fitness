@@ -27,6 +27,7 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
           properties: {
             date: { type: "string", description: "YYYY-MM-DD (defaults to today)" },
             exercise: { type: "string", description: "Exercise name, e.g. bench press" },
+            category: { type: "string", description: "Push, Pull, or Legs", enum: ["push", "pull", "legs"] },
             sets: { type: "number" },
             reps: { type: "number" },
             weight: { type: "number", description: "Weight in lbs" },
@@ -107,12 +108,26 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
         },
       },
       {
+        name: "log_stretching",
+        description: "Log a stretching session. Use when the user mentions stretching, flexibility, mobility, or yoga.",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            date: { type: "string", description: "YYYY-MM-DD (defaults to today)" },
+            stretch: { type: "string", description: "Stretch name, e.g. hamstring stretch" },
+            duration_min: { type: "number", description: "Duration in minutes" },
+            notes: { type: "string", default: "" },
+          },
+          required: ["stretch", "duration_min"],
+        },
+      },
+      {
         name: "query_domain",
         description: "Query logged fitness entries for a specific domain (strength, cardio, steps, nutrition, sleep, or weight). Supports optional date range filtering. Use when the user asks to see their logged data, history, or entries for a specific time period.",
         inputSchema: {
           type: "object" as const,
           properties: {
-            domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight"] },
+            domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight", "stretching"] },
             from: { type: "string", description: "YYYY-MM-DD start date" },
             to: { type: "string", description: "YYYY-MM-DD end date" },
           },
@@ -130,7 +145,7 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
         inputSchema: {
           type: "object" as const,
           properties: {
-            domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight"] },
+            domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight", "stretching"] },
             from: { type: "string" },
             to: { type: "string" },
           },
@@ -168,7 +183,7 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
               items: {
                 type: "object",
                 properties: {
-                  domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight"] },
+                  domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight", "stretching"] },
                   data: { type: "object", description: "The entry data (same fields as individual log tools)" },
                 },
                 required: ["domain", "data"],
