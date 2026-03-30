@@ -14,4 +14,5 @@ export {
   type NutritionEntry,
   type SleepEntry,
   type WeightEntry,
+  type StretchingEntry,
 } from "./types";

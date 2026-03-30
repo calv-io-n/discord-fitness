@@ -19,6 +19,7 @@ describe("appendEntry", () => {
     const entry: StrengthEntry = {
       date: "2026-03-29",
       exercise: "bench press",
+      category: "push",
       sets: 4,
       reps: 8,
       weight: 185,
@@ -32,14 +33,15 @@ describe("appendEntry", () => {
 
     const content = readFileSync(filePath, "utf-8");
     const lines = content.trim().split("\n");
-    expect(lines[0]).toBe("date,exercise,sets,reps,weight,notes");
-    expect(lines[1]).toBe("2026-03-29,bench press,4,8,185,felt strong");
+    expect(lines[0]).toBe("date,exercise,category,sets,reps,weight,notes");
+    expect(lines[1]).toBe("2026-03-29,bench press,push,4,8,185,felt strong");
   });
 
   it("appends to existing CSV without duplicating header", () => {
     const entry1: StrengthEntry = {
       date: "2026-03-29",
       exercise: "bench press",
+      category: "push",
       sets: 4,
       reps: 8,
       weight: 185,
@@ -48,6 +50,7 @@ describe("appendEntry", () => {
     const entry2: StrengthEntry = {
       date: "2026-03-29",
       exercise: "squat",
+      category: "legs",
       sets: 5,
       reps: 5,
       weight: 315,
@@ -60,7 +63,7 @@ describe("appendEntry", () => {
     const content = readFileSync(`${TEST_DATA_DIR}/strength/2026-03.csv`, "utf-8");
     const lines = content.trim().split("\n");
     expect(lines).toHaveLength(3); // header + 2 entries
-    expect(lines[2]).toBe("2026-03-29,squat,5,5,315,new PR");
+    expect(lines[2]).toBe("2026-03-29,squat,legs,5,5,315,new PR");
   });
 
   it("handles nutrition entries with many columns", () => {

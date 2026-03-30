@@ -52,6 +52,7 @@ function getNumericColumns(domain: Domain): Set<string> {
     nutrition: ["calories", "protein", "carbs", "fat"],
     sleep: ["hours"],
     weight: ["weight"],
+    stretching: ["duration_min"],
   };
   return new Set(map[domain]);
 }

@@ -1,11 +1,12 @@
 // src/csv-store/types.ts
 
-export const DOMAINS = ["strength", "cardio", "steps", "nutrition", "sleep", "weight"] as const;
+export const DOMAINS = ["strength", "cardio", "steps", "nutrition", "sleep", "weight", "stretching"] as const;
 export type Domain = (typeof DOMAINS)[number];
 
 export interface StrengthEntry {
   date: string;
   exercise: string;
+  category: string;
   sets: number;
   reps: number;
   weight: number;
@@ -48,6 +49,13 @@ export interface WeightEntry {
   notes: string;
 }
 
+export interface StretchingEntry {
+  date: string;
+  stretch: string;
+  duration_min: number;
+  notes: string;
+}
+
 export type DomainEntry = {
   strength: StrengthEntry;
   cardio: CardioEntry;
@@ -55,15 +63,17 @@ export type DomainEntry = {
   nutrition: NutritionEntry;
   sleep: SleepEntry;
   weight: WeightEntry;
+  stretching: StretchingEntry;
 };
 
 export const CSV_HEADERS: Record<Domain, string> = {
-  strength: "date,exercise,sets,reps,weight,notes",
+  strength: "date,exercise,category,sets,reps,weight,notes",
   cardio: "date,type,duration,notes",
   steps: "date,steps,notes",
   nutrition: "date,meal,calories,protein,carbs,fat,notes",
   sleep: "date,hours,quality,notes",
   weight: "date,weight,notes",
+  stretching: "date,stretch,duration_min,notes",
 };
 
 export interface DateRange {
