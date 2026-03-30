@@ -1,0 +1,189 @@
+<h2>Strength Page Layout</h2>
+<p class="subtitle">Workout heatmap + progressive overload tracking per PPL category</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Heatmap Top, PPL Tabs Below with Per-Lift Charts</h3>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-body" style="padding:16px">
+          <!-- Heatmap -->
+          <div style="margin-bottom:16px">
+            <div style="font-size:12px;font-weight:600;margin-bottom:8px">Workout Heatmap — March 2026</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;max-width:320px">
+              <div style="font-size:9px;color:#666;text-align:center">M</div>
+              <div style="font-size:9px;color:#666;text-align:center">T</div>
+              <div style="font-size:9px;color:#666;text-align:center">W</div>
+              <div style="font-size:9px;color:#666;text-align:center">T</div>
+              <div style="font-size:9px;color:#666;text-align:center">F</div>
+              <div style="font-size:9px;color:#666;text-align:center">S</div>
+              <div style="font-size:9px;color:#666;text-align:center">S</div>
+              <!-- Week 1 -->
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.4"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <!-- Week 2 -->
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.7"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.5"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.8"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <!-- Week 3 -->
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.9"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.6"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <!-- Week 4 -->
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.8"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.7"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.5"></div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:6px;font-size:10px;color:#666">
+              <span>■ Push</span>
+              <span style="color:#3b82f6">■ Pull</span>
+              <span style="color:#f59e0b">■ Legs</span>
+              <span style="color:#1a1a2e;border:1px solid #333;border-radius:2px;padding:0 2px">Rest</span>
+            </div>
+          </div>
+
+          <!-- PPL Tabs -->
+          <div style="display:flex;gap:4px;margin-bottom:12px">
+            <div style="padding:6px 14px;background:#22c55e;color:#000;border-radius:6px;font-size:12px;font-weight:600">Push</div>
+            <div style="padding:6px 14px;background:#1a1a2e;color:#888;border-radius:6px;font-size:12px;border:1px solid #333">Pull</div>
+            <div style="padding:6px 14px;background:#1a1a2e;color:#888;border-radius:6px;font-size:12px;border:1px solid #333">Legs</div>
+          </div>
+
+          <!-- Per-lift progressive overload -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:13px;font-weight:600">Bench Press</div>
+                <div style="font-size:11px;color:#22c55e">↑ +10 lbs</div>
+              </div>
+              <div style="font-size:11px;color:#888;margin-top:4px">Last: 185 lbs × 3×8</div>
+              <!-- Mini trend line -->
+              <div style="display:flex;align-items:end;gap:3px;height:40px;margin-top:8px">
+                <div style="flex:1;background:#333;border-radius:2px;height:50%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:55%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:60%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:65%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:70%"></div>
+                <div style="flex:1;background:#22c55e;border-radius:2px;height:80%"></div>
+              </div>
+            </div>
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:13px;font-weight:600">Overhead Press</div>
+                <div style="font-size:11px;color:#f59e0b">— Same</div>
+              </div>
+              <div style="font-size:11px;color:#888;margin-top:4px">Last: 115 lbs × 3×6</div>
+              <div style="display:flex;align-items:end;gap:3px;height:40px;margin-top:8px">
+                <div style="flex:1;background:#333;border-radius:2px;height:65%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:65%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:70%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:70%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:70%"></div>
+                <div style="flex:1;background:#f59e0b;border-radius:2px;height:70%"></div>
+              </div>
+            </div>
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:13px;font-weight:600">Incline DB Press</div>
+                <div style="font-size:11px;color:#22c55e">↑ +5 lbs</div>
+              </div>
+              <div style="font-size:11px;color:#888;margin-top:4px">Last: 55 lbs × 3×10</div>
+              <div style="display:flex;align-items:end;gap:3px;height:40px;margin-top:8px">
+                <div style="flex:1;background:#333;border-radius:2px;height:55%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:60%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:60%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:65%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:70%"></div>
+                <div style="flex:1;background:#22c55e;border-radius:2px;height:75%"></div>
+              </div>
+            </div>
+            <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-size:13px;font-weight:600">Tricep Pushdown</div>
+                <div style="font-size:11px;color:#ef4444">↓ -5 lbs</div>
+              </div>
+              <div style="font-size:11px;color:#888;margin-top:4px">Last: 45 lbs × 3×12</div>
+              <div style="display:flex;align-items:end;gap:3px;height:40px;margin-top:8px">
+                <div style="flex:1;background:#333;border-radius:2px;height:70%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:75%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:70%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:65%"></div>
+                <div style="flex:1;background:#333;border-radius:2px;height:60%"></div>
+                <div style="flex:1;background:#ef4444;border-radius:2px;height:55%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:8px;font-size:13px;color:#aaa">Heatmap shows workout frequency at a glance. PPL tabs filter exercises. Each lift card shows trend direction + mini sparkline. Green = progressing, yellow = plateau, red = regressing.</p>
+    </div>
+  </div>
+
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Heatmap Top, All Lifts in a Table with Trend Indicators</h3>
+      <div class="mockup" style="margin-top:12px">
+        <div class="mockup-body" style="padding:16px">
+          <!-- Same heatmap -->
+          <div style="margin-bottom:16px">
+            <div style="font-size:12px;font-weight:600;margin-bottom:8px">Workout Heatmap — March 2026</div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;max-width:320px">
+              <div style="font-size:9px;color:#666;text-align:center">M</div><div style="font-size:9px;color:#666;text-align:center">T</div><div style="font-size:9px;color:#666;text-align:center">W</div><div style="font-size:9px;color:#666;text-align:center">T</div><div style="font-size:9px;color:#666;text-align:center">F</div><div style="font-size:9px;color:#666;text-align:center">S</div><div style="font-size:9px;color:#666;text-align:center">S</div>
+              <div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.5"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.7"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.6"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.9"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+              <div style="aspect-ratio:1;background:#22c55e;border-radius:3px"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.7"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#22c55e;border-radius:3px;opacity:0.8"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div><div style="aspect-ratio:1;background:#1a1a2e;border-radius:3px"></div>
+            </div>
+          </div>
+
+          <!-- Table view -->
+          <div style="background:#1a1a2e;border-radius:8px;padding:14px;border:1px solid #333">
+            <div style="display:flex;gap:4px;margin-bottom:12px">
+              <div style="padding:4px 10px;background:#22c55e;color:#000;border-radius:4px;font-size:11px;font-weight:600">All</div>
+              <div style="padding:4px 10px;background:#222;color:#888;border-radius:4px;font-size:11px">Push</div>
+              <div style="padding:4px 10px;background:#222;color:#888;border-radius:4px;font-size:11px">Pull</div>
+              <div style="padding:4px 10px;background:#222;color:#888;border-radius:4px;font-size:11px">Legs</div>
+            </div>
+            <table style="width:100%;font-size:12px;border-collapse:collapse">
+              <thead>
+                <tr style="color:#888;text-align:left;border-bottom:1px solid #333">
+                  <th style="padding:8px 4px">Exercise</th>
+                  <th style="padding:8px 4px">Category</th>
+                  <th style="padding:8px 4px">Last</th>
+                  <th style="padding:8px 4px">Best</th>
+                  <th style="padding:8px 4px">Trend</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #222"><td style="padding:8px 4px">Bench Press</td><td style="padding:8px 4px;color:#888">Push</td><td style="padding:8px 4px">185×8</td><td style="padding:8px 4px">185×8</td><td style="padding:8px 4px;color:#22c55e">↑ +10</td></tr>
+                <tr style="border-bottom:1px solid #222"><td style="padding:8px 4px">Overhead Press</td><td style="padding:8px 4px;color:#888">Push</td><td style="padding:8px 4px">115×6</td><td style="padding:8px 4px">120×5</td><td style="padding:8px 4px;color:#f59e0b">— Same</td></tr>
+                <tr style="border-bottom:1px solid #222"><td style="padding:8px 4px">Barbell Row</td><td style="padding:8px 4px;color:#888">Pull</td><td style="padding:8px 4px">155×8</td><td style="padding:8px 4px">155×8</td><td style="padding:8px 4px;color:#22c55e">↑ +5</td></tr>
+                <tr style="border-bottom:1px solid #222"><td style="padding:8px 4px">Squat</td><td style="padding:8px 4px;color:#888">Legs</td><td style="padding:8px 4px">225×5</td><td style="padding:8px 4px">225×5</td><td style="padding:8px 4px;color:#22c55e">↑ +15</td></tr>
+                <tr><td style="padding:8px 4px">RDL</td><td style="padding:8px 4px;color:#888">Legs</td><td style="padding:8px 4px">185×8</td><td style="padding:8px 4px">195×6</td><td style="padding:8px 4px;color:#ef4444">↓ -10</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:8px;font-size:13px;color:#aaa">More compact. All exercises visible in one filterable table. Trend column gives quick read on progression. Click a row to expand detailed history.</p>
+    </div>
+  </div>
+</div>

@@ -6,6 +6,8 @@
   "scripts": {
     "mcp": "bun run src/mcp-server/run.ts",
     "dashboard": "bun run src/dashboard/run.ts",
+    "frontend": "cd frontend && bunx vite",
+    "dev": "bun run dashboard & cd frontend && bunx vite",
     "test": "bun test"
   },
   "devDependencies": {
