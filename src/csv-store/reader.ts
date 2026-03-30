@@ -47,10 +47,10 @@ export function readEntries<D extends Domain>(
 function getNumericColumns(domain: Domain): Set<string> {
   const map: Record<Domain, string[]> = {
     strength: ["sets", "reps", "weight"],
-    cardio: ["duration_min", "distance", "avg_hr"],
+    cardio: ["duration"],
     steps: ["steps"],
-    nutrition: ["calories", "protein_g", "carbs_g", "fat_g", "fiber_g", "sodium_mg", "sugar_g", "cholesterol_mg"],
-    sleep: ["duration_hr"],
+    nutrition: ["calories", "protein", "carbs", "fat"],
+    sleep: ["hours"],
     weight: ["weight"],
   };
   return new Set(map[domain]);

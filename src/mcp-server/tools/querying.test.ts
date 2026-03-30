@@ -38,9 +38,9 @@ describe("handleGetToday", () => {
 
 describe("handleGetSummary", () => {
   it("returns aggregated stats", () => {
-    const base = { carbs_g: 40, fat_g: 15, fiber_g: 5, sodium_mg: 500, sugar_g: 5, cholesterol_mg: 100 };
-    appendEntry("nutrition", { date: TODAY, meal: "breakfast", calories: 500, protein_g: 40, notes: "", ...base } as NutritionEntry, TEST_DATA_DIR);
-    appendEntry("nutrition", { date: TODAY, meal: "lunch", calories: 700, protein_g: 50, notes: "", ...base } as NutritionEntry, TEST_DATA_DIR);
+    const base = { carbs: 40, fat: 15 };
+    appendEntry("nutrition", { date: TODAY, meal: "breakfast", calories: 500, protein: 40, notes: "", ...base } as NutritionEntry, TEST_DATA_DIR);
+    appendEntry("nutrition", { date: TODAY, meal: "lunch", calories: 700, protein: 50, notes: "", ...base } as NutritionEntry, TEST_DATA_DIR);
 
     const result = handleGetSummary({ domain: "nutrition", from: TODAY, to: TODAY }, TEST_DATA_DIR);
     expect(result.count).toBe(2);

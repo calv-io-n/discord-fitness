@@ -19,7 +19,7 @@ afterEach(() => {
 describe("getToday", () => {
   it("returns entries from all domains for today", () => {
     appendEntry("steps", { date: TODAY, steps: 5000, notes: "" } as StepsEntry, TEST_DATA_DIR);
-    appendEntry("weight", { date: TODAY, weight: 185.4, unit: "lb", notes: "" } as WeightEntry, TEST_DATA_DIR);
+    appendEntry("weight", { date: TODAY, weight: 185.4, notes: "" } as WeightEntry, TEST_DATA_DIR);
 
     const result = getToday(TEST_DATA_DIR);
     expect(result.steps).toHaveLength(1);
@@ -30,20 +30,16 @@ describe("getToday", () => {
 
 describe("getSummary", () => {
   it("returns totals and averages for nutrition", () => {
-    const base: Omit<NutritionEntry, "date" | "meal" | "calories" | "protein_g" | "notes"> = {
-      carbs_g: 40,
-      fat_g: 15,
-      fiber_g: 5,
-      sodium_mg: 500,
-      sugar_g: 5,
-      cholesterol_mg: 100,
+    const base: Omit<NutritionEntry, "date" | "meal" | "calories" | "protein" | "notes"> = {
+      carbs: 40,
+      fat: 15,
     };
 
     appendEntry("nutrition", {
       date: TODAY,
       meal: "breakfast",
       calories: 500,
-      protein_g: 40,
+      protein: 40,
       notes: "",
       ...base,
     } as NutritionEntry, TEST_DATA_DIR);
@@ -52,7 +48,7 @@ describe("getSummary", () => {
       date: TODAY,
       meal: "lunch",
       calories: 700,
-      protein_g: 50,
+      protein: 50,
       notes: "",
       ...base,
     } as NutritionEntry, TEST_DATA_DIR);
@@ -60,7 +56,7 @@ describe("getSummary", () => {
     const summary = getSummary("nutrition", TEST_DATA_DIR, { from: TODAY, to: TODAY });
     expect(summary.count).toBe(2);
     expect(summary.totals.calories).toBe(1200);
-    expect(summary.totals.protein_g).toBe(90);
+    expect(summary.totals.protein).toBe(90);
     expect(summary.averages.calories).toBe(600);
   });
 

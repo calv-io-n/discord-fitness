@@ -1,8 +1,8 @@
 nutrition:
-  calories: 2500
-  protein_g: 180
-  carbs_g: 280
-  fat_g: 80
+  calories: 2400
+  protein: 180
+  carbs: 280
+  fat: 80
 
 strength:
   bench_press: 225
@@ -17,4 +17,3 @@ sleep:
 
 weight:
   target: 180
-  unit: lb

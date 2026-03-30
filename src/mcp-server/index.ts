@@ -21,16 +21,15 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
     tools: [
       {
         name: "log_strength",
-        description: "Log a strength/weight training exercise to the fitness tracker. Use when the user mentions lifting, bench press, squat, deadlift, curls, rows, or any resistance exercise. Records exercise name, sets, reps, and weight lifted.",
+        description: "Log a strength/weight training exercise. Use when the user mentions lifting, bench press, squat, deadlift, curls, rows, or any resistance exercise.",
         inputSchema: {
           type: "object" as const,
           properties: {
             date: { type: "string", description: "YYYY-MM-DD (defaults to today)" },
-            exercise: { type: "string" },
+            exercise: { type: "string", description: "Exercise name, e.g. bench press" },
             sets: { type: "number" },
             reps: { type: "number" },
-            weight: { type: "number" },
-            unit: { type: "string", default: "lb" },
+            weight: { type: "number", description: "Weight in lbs" },
             notes: { type: "string", default: "" },
           },
           required: ["exercise", "sets", "reps", "weight"],
@@ -38,24 +37,21 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
       },
       {
         name: "log_cardio",
-        description: "Log a cardio/aerobic exercise session to the fitness tracker. Use when the user mentions running, cycling, swimming, rowing, walking, hiking, or any endurance activity. Records activity type, duration, distance, and heart rate.",
+        description: "Log a cardio/aerobic session. Use when the user mentions running, cycling, swimming, rowing, walking, hiking, or any endurance activity.",
         inputSchema: {
           type: "object" as const,
           properties: {
             date: { type: "string" },
-            type: { type: "string" },
-            duration_min: { type: "number" },
-            distance: { type: "number" },
-            distance_unit: { type: "string", default: "mi" },
-            avg_hr: { type: "number" },
+            type: { type: "string", description: "Activity type, e.g. running" },
+            duration: { type: "number", description: "Duration in minutes" },
             notes: { type: "string", default: "" },
           },
-          required: ["type", "duration_min"],
+          required: ["type", "duration"],
         },
       },
       {
         name: "log_steps",
-        description: "Log daily step count to the fitness tracker. Use when the user reports how many steps they walked today.",
+        description: "Log daily step count. Use when the user reports how many steps they walked.",
         inputSchema: {
           type: "object" as const,
           properties: {
@@ -68,50 +64,43 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
       },
       {
         name: "log_nutrition",
-        description: "Log a meal or food intake to the nutrition tracker. Use when the user mentions eating, breakfast, lunch, dinner, snack, or any food. Records calories, protein, carbs, fat, fiber, sodium, sugar, and cholesterol. Estimate macros if the user describes food without exact numbers.",
+        description: "Log a meal or food intake. Use when the user mentions eating, breakfast, lunch, dinner, snack, or any food. Estimate macros if the user describes food without exact numbers.",
         inputSchema: {
           type: "object" as const,
           properties: {
             date: { type: "string" },
-            meal: { type: "string" },
+            meal: { type: "string", description: "Meal name, e.g. breakfast, lunch" },
             calories: { type: "number" },
-            protein_g: { type: "number" },
-            carbs_g: { type: "number" },
-            fat_g: { type: "number" },
-            fiber_g: { type: "number" },
-            sodium_mg: { type: "number" },
-            sugar_g: { type: "number" },
-            cholesterol_mg: { type: "number" },
+            protein: { type: "number", description: "Protein in grams" },
+            carbs: { type: "number", description: "Carbs in grams" },
+            fat: { type: "number", description: "Fat in grams" },
             notes: { type: "string", default: "" },
           },
-          required: ["meal", "calories", "protein_g", "carbs_g", "fat_g"],
+          required: ["meal", "calories", "protein", "carbs", "fat"],
         },
       },
       {
         name: "log_sleep",
-        description: "Log sleep data to the fitness tracker. Use when the user mentions sleep, bedtime, wake time, or how many hours they slept. Records bed time, wake time, duration, and quality (good/fair/poor).",
+        description: "Log sleep data. Use when the user mentions sleep or how many hours they slept.",
         inputSchema: {
           type: "object" as const,
           properties: {
             date: { type: "string" },
-            bed_time: { type: "string" },
-            wake_time: { type: "string" },
-            duration_hr: { type: "number" },
-            quality: { type: "string" },
+            hours: { type: "number", description: "Hours slept" },
+            quality: { type: "string", description: "good, fair, or poor" },
             notes: { type: "string", default: "" },
           },
-          required: ["bed_time", "wake_time", "duration_hr"],
+          required: ["hours"],
         },
       },
       {
         name: "log_weight",
-        description: "Log a body weight measurement to the fitness tracker. Use when the user mentions weighing themselves or their current body weight.",
+        description: "Log a body weight measurement. Use when the user mentions weighing themselves.",
         inputSchema: {
           type: "object" as const,
           properties: {
             date: { type: "string" },
-            weight: { type: "number" },
-            unit: { type: "string", default: "lb" },
+            weight: { type: "number", description: "Body weight in lbs" },
             notes: { type: "string", default: "" },
           },
           required: ["weight"],

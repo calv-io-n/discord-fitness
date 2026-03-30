@@ -11,7 +11,8 @@
   "devDependencies": {
     "@types/bun": "latest",
     "@types/js-yaml": "^4.0.9",
-    "@types/papaparse": "^5.5.2"
+    "@types/papaparse": "^5.5.2",
+    "shadcn": "^4.1.1"
   },
   "peerDependencies": {
     "typescript": "^5"

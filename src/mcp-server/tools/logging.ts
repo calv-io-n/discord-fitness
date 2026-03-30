@@ -10,6 +10,31 @@ const TOOL_TO_DOMAIN: Record<string, Domain> = {
   log_weight: "weight",
 };
 
+// Map common field name variations to canonical CSV column names
+const FIELD_ALIASES: Record<string, string> = {
+  duration_min: "duration",
+  duration_minutes: "duration",
+  minutes: "duration",
+  protein_g: "protein",
+  carbs_g: "carbs",
+  fat_g: "fat",
+  duration_hr: "hours",
+  sleep_hours: "hours",
+  body_weight: "weight",
+  step_count: "steps",
+};
+
+function normalizeFields(args: Record<string, unknown>): Record<string, unknown> {
+  const normalized: Record<string, unknown> = {};
+  for (const [key, val] of Object.entries(args)) {
+    const canonical = FIELD_ALIASES[key] || key;
+    if (!(canonical in normalized)) {
+      normalized[canonical] = val;
+    }
+  }
+  return normalized;
+}
+
 interface LogResult {
   success: boolean;
   message: string;
@@ -26,7 +51,8 @@ export function handleLogTool(
   }
 
   const today = new Date().toISOString().slice(0, 10);
-  const entry = { date: today, ...args } as DomainEntry[typeof domain];
+  const normalized = normalizeFields(args);
+  const entry = { date: today, ...normalized } as DomainEntry[typeof domain];
 
   appendEntry(domain, entry, dataDir);
 

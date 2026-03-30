@@ -9,17 +9,13 @@ export interface StrengthEntry {
   sets: number;
   reps: number;
   weight: number;
-  unit: string;
   notes: string;
 }
 
 export interface CardioEntry {
   date: string;
   type: string;
-  duration_min: number;
-  distance: number;
-  distance_unit: string;
-  avg_hr: number;
+  duration: number;
   notes: string;
 }
 
@@ -33,21 +29,15 @@ export interface NutritionEntry {
   date: string;
   meal: string;
   calories: number;
-  protein_g: number;
-  carbs_g: number;
-  fat_g: number;
-  fiber_g: number;
-  sodium_mg: number;
-  sugar_g: number;
-  cholesterol_mg: number;
+  protein: number;
+  carbs: number;
+  fat: number;
   notes: string;
 }
 
 export interface SleepEntry {
   date: string;
-  bed_time: string;
-  wake_time: string;
-  duration_hr: number;
+  hours: number;
   quality: string;
   notes: string;
 }
@@ -55,7 +45,6 @@ export interface SleepEntry {
 export interface WeightEntry {
   date: string;
   weight: number;
-  unit: string;
   notes: string;
 }
 
@@ -69,12 +58,12 @@ export type DomainEntry = {
 };
 
 export const CSV_HEADERS: Record<Domain, string> = {
-  strength: "date,exercise,sets,reps,weight,unit,notes",
-  cardio: "date,type,duration_min,distance,distance_unit,avg_hr,notes",
+  strength: "date,exercise,sets,reps,weight,notes",
+  cardio: "date,type,duration,notes",
   steps: "date,steps,notes",
-  nutrition: "date,meal,calories,protein_g,carbs_g,fat_g,fiber_g,sodium_mg,sugar_g,cholesterol_mg,notes",
-  sleep: "date,bed_time,wake_time,duration_hr,quality,notes",
-  weight: "date,weight,unit,notes",
+  nutrition: "date,meal,calories,protein,carbs,fat,notes",
+  sleep: "date,hours,quality,notes",
+  weight: "date,weight,notes",
 };
 
 export interface DateRange {

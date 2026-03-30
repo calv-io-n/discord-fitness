@@ -34,21 +34,21 @@ async function renderOverview() {
   const [today, targets] = await Promise.all([api("/today"), api("/targets")]);
 
   const totalCalories = (today.nutrition || []).reduce((sum, e) => sum + e.calories, 0);
-  const totalProtein = (today.nutrition || []).reduce((sum, e) => sum + e.protein_g, 0);
-  const totalCarbs = (today.nutrition || []).reduce((sum, e) => sum + e.carbs_g, 0);
-  const totalFat = (today.nutrition || []).reduce((sum, e) => sum + e.fat_g, 0);
+  const totalProtein = (today.nutrition || []).reduce((sum, e) => sum + e.protein, 0);
+  const totalCarbs = (today.nutrition || []).reduce((sum, e) => sum + e.carbs, 0);
+  const totalFat = (today.nutrition || []).reduce((sum, e) => sum + e.fat, 0);
   const totalSteps = (today.steps || []).reduce((sum, e) => sum + e.steps, 0);
   const latestWeight = (today.weight || []).slice(-1)[0];
   const latestSleep = (today.sleep || []).slice(-1)[0];
 
   const cards = [
     { label: "Calories", value: totalCalories, target: targets.nutrition?.calories, unit: "kcal" },
-    { label: "Protein", value: totalProtein, target: targets.nutrition?.protein_g, unit: "g" },
-    { label: "Carbs", value: totalCarbs, target: targets.nutrition?.carbs_g, unit: "g" },
-    { label: "Fat", value: totalFat, target: targets.nutrition?.fat_g, unit: "g" },
+    { label: "Protein", value: totalProtein, target: targets.nutrition?.protein, unit: "g" },
+    { label: "Carbs", value: totalCarbs, target: targets.nutrition?.carbs, unit: "g" },
+    { label: "Fat", value: totalFat, target: targets.nutrition?.fat, unit: "g" },
     { label: "Steps", value: totalSteps, target: targets.steps?.daily, unit: "" },
     { label: "Weight", value: latestWeight?.weight || "—", target: targets.weight?.target, unit: targets.weight?.unit || "lb" },
-    { label: "Sleep", value: latestSleep?.duration_hr || "—", target: targets.sleep?.hours, unit: "hrs" },
+    { label: "Sleep", value: latestSleep?.hours || "—", target: targets.sleep?.hours, unit: "hrs" },
   ];
 
   app.innerHTML = `
@@ -123,7 +123,7 @@ async function renderTrends() {
   if (sleep.entries.length) {
     createChart(document.getElementById("sleepChart"), {
       type: "line",
-      data: { labels: sleep.entries.map((e) => e.date), datasets: [{ data: sleep.entries.map((e) => e.duration_hr), borderColor: "#9b59b6", tension: 0.3 }] },
+      data: { labels: sleep.entries.map((e) => e.date), datasets: [{ data: sleep.entries.map((e) => e.hours), borderColor: "#9b59b6", tension: 0.3 }] },
       options: chartDefaults,
     });
   }
@@ -144,13 +144,13 @@ async function renderAdherence() {
 
   // Protein adherence per day
   const proteinByDay = {};
-  (nutrition.entries || []).forEach((e) => { proteinByDay[e.date] = (proteinByDay[e.date] || 0) + e.protein_g; });
+  (nutrition.entries || []).forEach((e) => { proteinByDay[e.date] = (proteinByDay[e.date] || 0) + e.protein; });
 
   const stepsByDay = {};
   (steps.entries || []).forEach((e) => { stepsByDay[e.date] = (stepsByDay[e.date] || 0) + e.steps; });
 
   const sleepByDay = {};
-  (sleep.entries || []).forEach((e) => { sleepByDay[e.date] = e.duration_hr; });
+  (sleep.entries || []).forEach((e) => { sleepByDay[e.date] = e.hours; });
 
   const daysInMonth = new Date(year, now.getMonth() + 1, 0).getDate();
 
@@ -167,7 +167,7 @@ async function renderAdherence() {
 
   app.innerHTML = `
     <h2>Adherence — ${year}-${month}</h2>
-    ${heatmapHTML(proteinByDay, targets.nutrition?.protein_g || 180, "Protein (g)")}
+    ${heatmapHTML(proteinByDay, targets.nutrition?.protein || 180, "Protein (g)")}
     ${heatmapHTML(stepsByDay, targets.steps?.daily || 10000, "Steps")}
     ${heatmapHTML(sleepByDay, targets.sleep?.hours || 7.5, "Sleep (hrs)")}
   `;
@@ -186,9 +186,9 @@ async function renderNutrition() {
 
   // Today's macros
   const todayEntries = entries.filter((e) => e.date === today);
-  const todayProtein = todayEntries.reduce((s, e) => s + e.protein_g, 0);
-  const todayCarbs = todayEntries.reduce((s, e) => s + e.carbs_g, 0);
-  const todayFat = todayEntries.reduce((s, e) => s + e.fat_g, 0);
+  const todayProtein = todayEntries.reduce((s, e) => s + e.protein, 0);
+  const todayCarbs = todayEntries.reduce((s, e) => s + e.carbs, 0);
+  const todayFat = todayEntries.reduce((s, e) => s + e.fat, 0);
   const todayCalories = todayEntries.reduce((s, e) => s + e.calories, 0);
 
   // Weekly calories

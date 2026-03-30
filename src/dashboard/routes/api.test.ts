@@ -16,7 +16,7 @@ beforeEach(() => {
     TARGETS_PATH,
     `nutrition:
   calories: 2500
-  protein_g: 180
+  protein: 180
 steps:
   daily: 10000
 `
@@ -82,9 +82,9 @@ describe("GET /api/today", () => {
 describe("GET /api/:domain/summary", () => {
   it("returns aggregated stats", async () => {
     const today = new Date().toISOString().slice(0, 10);
-    const base = { carbs_g: 40, fat_g: 15, fiber_g: 5, sodium_mg: 500, sugar_g: 5, cholesterol_mg: 100 };
-    appendEntry("nutrition", { date: today, meal: "breakfast", calories: 500, protein_g: 40, notes: "", ...base } as NutritionEntry, TEST_DATA_DIR);
-    appendEntry("nutrition", { date: today, meal: "lunch", calories: 700, protein_g: 50, notes: "", ...base } as NutritionEntry, TEST_DATA_DIR);
+    const base = { carbs: 40, fat: 15 };
+    appendEntry("nutrition", { date: today, meal: "breakfast", calories: 500, protein: 40, notes: "", ...base } as NutritionEntry, TEST_DATA_DIR);
+    appendEntry("nutrition", { date: today, meal: "lunch", calories: 700, protein: 50, notes: "", ...base } as NutritionEntry, TEST_DATA_DIR);
 
     const app = createApp();
     const res = await app.handle(new Request(`http://localhost/api/nutrition/summary?from=${today}&to=${today}`));

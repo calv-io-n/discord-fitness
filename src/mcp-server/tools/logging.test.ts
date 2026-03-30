@@ -22,7 +22,6 @@ describe("handleLogTool", () => {
       sets: 4,
       reps: 8,
       weight: 185,
-      unit: "lb",
       notes: "",
     }, TEST_DATA_DIR);
 
@@ -37,13 +36,9 @@ describe("handleLogTool", () => {
       date: "2026-03-29",
       meal: "breakfast",
       calories: 450,
-      protein_g: 35,
-      carbs_g: 40,
-      fat_g: 15,
-      fiber_g: 8,
-      sodium_mg: 600,
-      sugar_g: 5,
-      cholesterol_mg: 120,
+      protein: 35,
+      carbs: 40,
+      fat: 15,
       notes: "eggs and oats",
     }, TEST_DATA_DIR);
 

@@ -22,7 +22,6 @@ describe("appendEntry", () => {
       sets: 4,
       reps: 8,
       weight: 185,
-      unit: "lb",
       notes: "felt strong",
     };
 
@@ -33,8 +32,8 @@ describe("appendEntry", () => {
 
     const content = readFileSync(filePath, "utf-8");
     const lines = content.trim().split("\n");
-    expect(lines[0]).toBe("date,exercise,sets,reps,weight,unit,notes");
-    expect(lines[1]).toBe("2026-03-29,bench press,4,8,185,lb,felt strong");
+    expect(lines[0]).toBe("date,exercise,sets,reps,weight,notes");
+    expect(lines[1]).toBe("2026-03-29,bench press,4,8,185,felt strong");
   });
 
   it("appends to existing CSV without duplicating header", () => {
@@ -44,7 +43,6 @@ describe("appendEntry", () => {
       sets: 4,
       reps: 8,
       weight: 185,
-      unit: "lb",
       notes: "",
     };
     const entry2: StrengthEntry = {
@@ -53,7 +51,6 @@ describe("appendEntry", () => {
       sets: 5,
       reps: 5,
       weight: 315,
-      unit: "lb",
       notes: "new PR",
     };
 
@@ -63,7 +60,7 @@ describe("appendEntry", () => {
     const content = readFileSync(`${TEST_DATA_DIR}/strength/2026-03.csv`, "utf-8");
     const lines = content.trim().split("\n");
     expect(lines).toHaveLength(3); // header + 2 entries
-    expect(lines[2]).toBe("2026-03-29,squat,5,5,315,lb,new PR");
+    expect(lines[2]).toBe("2026-03-29,squat,5,5,315,new PR");
   });
 
   it("handles nutrition entries with many columns", () => {
@@ -71,13 +68,9 @@ describe("appendEntry", () => {
       date: "2026-03-29",
       meal: "breakfast",
       calories: 450,
-      protein_g: 35,
-      carbs_g: 40,
-      fat_g: 15,
-      fiber_g: 8,
-      sodium_mg: 600,
-      sugar_g: 5,
-      cholesterol_mg: 120,
+      protein: 35,
+      carbs: 40,
+      fat: 15,
       notes: "eggs and oats",
     };
 
@@ -85,7 +78,7 @@ describe("appendEntry", () => {
 
     const content = readFileSync(`${TEST_DATA_DIR}/nutrition/2026-03.csv`, "utf-8");
     const lines = content.trim().split("\n");
-    expect(lines[1]).toBe("2026-03-29,breakfast,450,35,40,15,8,600,5,120,eggs and oats");
+    expect(lines[1]).toBe("2026-03-29,breakfast,450,35,40,15,eggs and oats");
   });
 
   it("derives correct monthly filename from date", () => {

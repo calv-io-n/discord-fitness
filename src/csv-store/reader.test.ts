@@ -23,7 +23,6 @@ describe("readEntries", () => {
       sets: 4,
       reps: 8,
       weight: 185,
-      unit: "lb",
       notes: "",
     } as StrengthEntry, TEST_DATA_DIR);
 
@@ -33,7 +32,6 @@ describe("readEntries", () => {
       sets: 5,
       reps: 5,
       weight: 315,
-      unit: "lb",
       notes: "",
     } as StrengthEntry, TEST_DATA_DIR);
 
@@ -51,7 +49,6 @@ describe("readEntries", () => {
       sets: 4,
       reps: 8,
       weight: 185,
-      unit: "lb",
       notes: "",
     } as StrengthEntry, TEST_DATA_DIR);
 
@@ -61,7 +58,6 @@ describe("readEntries", () => {
       sets: 5,
       reps: 5,
       weight: 315,
-      unit: "lb",
       notes: "",
     } as StrengthEntry, TEST_DATA_DIR);
 
@@ -76,7 +72,6 @@ describe("readEntries", () => {
       sets: 4,
       reps: 8,
       weight: 185,
-      unit: "lb",
       notes: "",
     } as StrengthEntry, TEST_DATA_DIR);
 
@@ -86,7 +81,6 @@ describe("readEntries", () => {
       sets: 5,
       reps: 5,
       weight: 315,
-      unit: "lb",
       notes: "",
     } as StrengthEntry, TEST_DATA_DIR);
 
@@ -96,7 +90,6 @@ describe("readEntries", () => {
       sets: 3,
       reps: 3,
       weight: 405,
-      unit: "lb",
       notes: "",
     } as StrengthEntry, TEST_DATA_DIR);
 
