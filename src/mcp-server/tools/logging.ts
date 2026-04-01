@@ -51,7 +51,7 @@ export function handleLogTool(
     return { success: false, message: `Unknown tool: ${toolName}` };
   }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: process.env.TZ || "America/Vancouver" });
   const normalized = normalizeFields(args);
   const entry = { date: today, ...normalized } as DomainEntry[typeof domain];
 

@@ -28,13 +28,13 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
           properties: {
             date: { type: "string", description: "YYYY-MM-DD (defaults to today)" },
             exercise: { type: "string", description: "Exercise name, e.g. bench press" },
-            category: { type: "string", description: "Push, Pull, or Legs", enum: ["push", "pull", "legs"] },
+            category: { type: "string", description: "Push, Pull, Legs, or Core", enum: ["push", "pull", "legs", "core"] },
             sets: { type: "number" },
             reps: { type: "number" },
             weight: { type: "number", description: "Weight in lbs" },
             notes: { type: "string", default: "" },
           },
-          required: ["exercise", "sets", "reps", "weight"],
+          required: ["exercise", "category", "sets", "reps", "weight"],
         },
       },
       {

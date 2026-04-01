@@ -19,7 +19,7 @@ function getWeekStart(date: Date): string {
   const d = new Date(date);
   const day = d.getDay();
   d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
-  return d.toISOString().slice(0, 10);
+  return d.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
 }
 
 function getWeekNumber(dateStr: string): string {
@@ -57,7 +57,7 @@ export default function Cardio() {
   }
 
   const now = new Date();
-  const today = now.toISOString().slice(0, 10);
+  const today = now.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
   const weekStart = getWeekStart(now);
 
   // Weekly total minutes
@@ -110,7 +110,7 @@ export default function Cardio() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Cardio</h1>
+      <h1 className="text-xl sm:text-2xl font-bold">Cardio</h1>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -141,7 +141,7 @@ export default function Cardio() {
               No cardio logged this month.
             </p>
           ) : (
-            <ResponsiveContainer width="100%" height={350}>
+            <ResponsiveContainer width="100%" height={250}>
               <BarChart data={barData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                 <XAxis
@@ -169,9 +169,9 @@ export default function Cardio() {
                     borderRadius: "8px",
                     color: "#e4e4e7",
                   }}
-                  formatter={(value: number, name: string) => [
+                  formatter={(value, name) => [
                     `${value} min`,
-                    name,
+                    String(name),
                   ]}
                 />
                 <Legend
@@ -231,7 +231,7 @@ export default function Cardio() {
                     borderRadius: "8px",
                     color: "#e4e4e7",
                   }}
-                  formatter={(value: number) => [`${value} min`, "Total"]}
+                  formatter={(value) => [`${value} min`, "Total"]}
                 />
                 <Line
                   type="monotone"

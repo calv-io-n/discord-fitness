@@ -3,7 +3,7 @@ import { readEntries } from "./reader";
 import { DOMAINS, type Domain, type DomainEntry, type DateRange } from "./types";
 
 export function getToday(dataDir: string = "data"): Record<Domain, DomainEntry[Domain][]> {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: process.env.TZ || "America/Vancouver" });
   const range: DateRange = { from: today, to: today };
 
   const result = {} as Record<Domain, DomainEntry[Domain][]>;

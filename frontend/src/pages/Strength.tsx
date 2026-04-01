@@ -15,6 +15,8 @@ import {
 import {
   BarChart,
   Bar,
+  LineChart,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -113,7 +115,7 @@ function buildHeatmapData(entries: StrengthEntry[]): Record<string, number> {
   return data;
 }
 
-const PPL_CATEGORIES = ["all", "push", "pull", "legs"] as const;
+const PPL_CATEGORIES = ["all", "push", "pull", "legs", "core"] as const;
 
 const MONTH_NAMES = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -135,12 +137,20 @@ export default function Strength() {
   const month = now.getMonth() + 1;
   const monthStr = String(month).padStart(2, "0");
 
-  // Fetch current month data
+  // Fetch current + previous month (for cross-month week coverage)
   useEffect(() => {
     setLoading(true);
-    api
-      .strength(year, monthStr)
-      .then((res) => setEntries(res.entries))
+    const prev = new Date(year, month - 2, 1);
+    const prevYear = prev.getFullYear();
+    const prevMonthStr = String(prev.getMonth() + 1).padStart(2, "0");
+
+    Promise.all([
+      api.strength(year, monthStr),
+      api.strength(prevYear, prevMonthStr).catch(() => ({ entries: [] as StrengthEntry[] })),
+    ])
+      .then(([current, previous]) => {
+        setEntries([...previous.entries, ...current.entries]);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, [year, monthStr]);
@@ -166,7 +176,7 @@ export default function Strength() {
     )
       .then((results) => {
         const data = results.map(({ m, y, entries: monthEntries }) => {
-          const volumeByCategory = { push: 0, pull: 0, legs: 0 };
+          const volumeByCategory = { push: 0, pull: 0, legs: 0, core: 0 };
           for (const e of monthEntries) {
             const cat = (e.category || "").toLowerCase();
             const vol = (e.sets || 0) * (e.reps || 0) * (e.weight || 0);
@@ -193,14 +203,42 @@ export default function Strength() {
     );
   }
 
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
+
+  // 7 days ago (excluding today)
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const sevenDaysAgoStr = sevenDaysAgo.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
+
+  const todayEntries = entries.filter((e) => e.date === today);
+  const recentEntries = entries.filter((e) => e.date >= sevenDaysAgoStr && e.date < today);
+
+  // Weekly sets: count sets per day for the last 7 days + today
+  const weekEntries = entries.filter((e) => e.date >= sevenDaysAgoStr && e.date <= today);
+  const setsByDate: Record<string, number> = {};
+  for (const e of weekEntries) {
+    setsByDate[e.date] = (setsByDate[e.date] || 0) + (e.sets || 0);
+  }
+  // Build chart data for each day in range
+  const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const weekChartData: { day: string; date: string; sets: number }[] = [];
+  for (let i = 7; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const dateStr = d.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
+    const dayName = i === 0 ? "Today" : weekDays[(d.getDay() + 6) % 7];
+    weekChartData.push({ day: dayName, date: dateStr, sets: setsByDate[dateStr] || 0 });
+  }
+  const weekTotalSets = weekChartData.reduce((s, d) => s + d.sets, 0);
+
   const heatmapData = buildHeatmapData(entries);
   const maxVolume = Math.max(...Object.values(heatmapData), 1);
-  const stats = computeStats(entries);
+  const recentStats = computeStats(recentEntries);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Strength</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold">Strength</h1>
         <div className="flex gap-2">
           <button
             onClick={() => setView("current")}
@@ -210,7 +248,7 @@ export default function Strength() {
                 : "text-[#a0a4b8] hover:text-white"
             }`}
           >
-            Current Month
+            Current
           </button>
           <button
             onClick={() => setView("summary")}
@@ -227,26 +265,108 @@ export default function Strength() {
 
       {view === "current" ? (
         <div className="space-y-6">
-          {/* Monthly Workout Heatmap */}
+          {/* Today's Workout */}
           <Card className="bg-[#12131a] border-[#1e2030]">
             <CardHeader>
               <CardTitle className="text-sm font-medium text-[#a0a4b8]">
-                Workout Volume Heatmap
+                Today's Workout
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Heatmap
-                year={year}
-                month={month}
-                data={heatmapData}
-                getIntensity={(v) => v / maxVolume}
-              />
+              {todayEntries.length === 0 ? (
+                <p className="text-sm text-[#6b6f85] py-4 text-center">
+                  No exercises logged today.
+                </p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-[#1e2030]">
+                        <TableHead className="text-[#8b8fa3]">Exercise</TableHead>
+                        <TableHead className="text-[#8b8fa3]">Category</TableHead>
+                        <TableHead className="text-right text-[#8b8fa3]">Sets</TableHead>
+                        <TableHead className="text-right text-[#8b8fa3]">Reps</TableHead>
+                        <TableHead className="text-right text-[#8b8fa3]">Weight</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {todayEntries.map((e, i) => (
+                        <TableRow key={i} className="border-[#1e2030]">
+                          <TableCell className="font-medium">{e.exercise}</TableCell>
+                          <TableCell>
+                            <span className="inline-block rounded bg-[#1a1b2e] px-2 py-0.5 text-xs text-[#a0a4b8] capitalize">
+                              {e.category || "\u2014"}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-right">{e.sets}</TableCell>
+                          <TableCell className="text-right">{e.reps}</TableCell>
+                          <TableCell className="text-right">{e.weight > 0 ? `${e.weight} lbs` : "BW"}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
             </CardContent>
           </Card>
 
-          {/* PPL Filter Tabs + Exercise Table */}
+          {/* Weekly Sets Card */}
           <Card className="bg-[#12131a] border-[#1e2030]">
-            <CardContent className="pt-6">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xs font-semibold text-[#6b6f85] uppercase tracking-wider">
+                Sets This Week
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold tracking-tight text-white mb-4">
+                {weekTotalSets}{" "}
+                <span className="text-base font-normal text-[#6b6f85]">sets</span>
+              </div>
+              <ResponsiveContainer width="100%" height={180}>
+                <LineChart data={weekChartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
+                  <XAxis
+                    dataKey="day"
+                    tick={{ fill: "#6b6f85", fontSize: 12 }}
+                    axisLine={{ stroke: "#1e2030" }}
+                    tickLine={{ stroke: "#1e2030" }}
+                  />
+                  <YAxis
+                    tick={{ fill: "#6b6f85", fontSize: 12 }}
+                    axisLine={{ stroke: "#1e2030" }}
+                    tickLine={{ stroke: "#1e2030" }}
+                    allowDecimals={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#12131a",
+                      border: "1px solid #1e2030",
+                      borderRadius: "8px",
+                      color: "#e4e4e7",
+                    }}
+                    formatter={(value) => [`${value} sets`, "Sets"]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="sets"
+                    stroke="#22c55e"
+                    strokeWidth={2}
+                    dot={{ fill: "#22c55e", r: 4 }}
+                    activeDot={{ r: 6 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Last 7 Days (excluding today) */}
+          <Card className="bg-[#12131a] border-[#1e2030]">
+            <CardHeader>
+              <CardTitle className="text-sm font-medium text-[#a0a4b8]">
+                Last 7 Days
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-2">
               <Tabs defaultValue="all">
                 <TabsList>
                   {PPL_CATEGORIES.map((cat) => (
@@ -261,8 +381,8 @@ export default function Strength() {
                     <ExerciseTable
                       stats={
                         cat === "all"
-                          ? stats
-                          : stats.filter(
+                          ? recentStats
+                          : recentStats.filter(
                               (s) => s.category.toLowerCase() === cat
                             )
                       }
@@ -276,6 +396,23 @@ export default function Strength() {
                   </TabsContent>
                 ))}
               </Tabs>
+            </CardContent>
+          </Card>
+
+          {/* Monthly Workout Heatmap */}
+          <Card className="bg-[#12131a] border-[#1e2030]">
+            <CardHeader>
+              <CardTitle className="text-sm font-medium text-[#a0a4b8]">
+                Workout Volume Heatmap
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Heatmap
+                year={year}
+                month={month}
+                data={heatmapData}
+                getIntensity={(v) => v / maxVolume}
+              />
             </CardContent>
           </Card>
         </div>
@@ -294,7 +431,7 @@ export default function Strength() {
                   Loading...
                 </div>
               ) : (
-                <ResponsiveContainer width="100%" height={350}>
+                <ResponsiveContainer width="100%" height={250}>
                   <BarChart data={summaryData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                     <XAxis
@@ -318,8 +455,8 @@ export default function Strength() {
                         borderRadius: "8px",
                         color: "#e4e4e7",
                       }}
-                      formatter={(value: number) => [
-                        value.toLocaleString() + " lbs",
+                      formatter={(value) => [
+                        Number(value).toLocaleString() + " lbs",
                       ]}
                     />
                     <Legend
@@ -341,6 +478,12 @@ export default function Strength() {
                       dataKey="legs"
                       name="Legs"
                       fill="#22c55e"
+                      radius={[4, 4, 0, 0]}
+                    />
+                    <Bar
+                      dataKey="core"
+                      name="Core"
+                      fill="#f59e0b"
                       radius={[4, 4, 0, 0]}
                     />
                   </BarChart>
