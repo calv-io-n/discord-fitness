@@ -3,11 +3,21 @@ import { readdirSync, readFileSync, existsSync } from "fs";
 import Papa from "papaparse";
 import { type Domain, type DomainEntry, type DateRange } from "./types";
 
+export type EntryWithMeta<E> = E & { _month: string; _index: number };
+
 export function readEntries<D extends Domain>(
   domain: D,
   dataDir: string = "data",
   dateRange?: DateRange
 ): DomainEntry[D][] {
+  return readEntriesWithMeta(domain, dataDir, dateRange) as unknown as DomainEntry[D][];
+}
+
+export function readEntriesWithMeta<D extends Domain>(
+  domain: D,
+  dataDir: string = "data",
+  dateRange?: DateRange
+): EntryWithMeta<DomainEntry[D]>[] {
   const domainDir = `${dataDir}/${domain}`;
   if (!existsSync(domainDir)) return [];
 
@@ -15,23 +25,24 @@ export function readEntries<D extends Domain>(
     .filter((f) => f.endsWith(".csv"))
     .sort();
 
-  const allEntries: DomainEntry[D][] = [];
+  const allEntries: EntryWithMeta<DomainEntry[D]>[] = [];
   const numericColumns = getNumericColumns(domain);
 
   for (const file of files) {
+    const monthKey = file.replace(/\.csv$/, "");
     const content = readFileSync(`${domainDir}/${file}`, "utf-8");
     const parsed = Papa.parse<Record<string, string>>(content, {
       header: true,
       skipEmptyLines: true,
     });
 
-    for (const row of parsed.data) {
-      const entry: Record<string, unknown> = {};
+    parsed.data.forEach((row, i) => {
+      const entry: Record<string, unknown> = { _month: monthKey, _index: i };
       for (const [key, val] of Object.entries(row)) {
         entry[key] = numericColumns.has(key) ? Number(val) : val;
       }
-      allEntries.push(entry as DomainEntry[D]);
-    }
+      allEntries.push(entry as unknown as EntryWithMeta<DomainEntry[D]>);
+    });
   }
 
   if (!dateRange) return allEntries;

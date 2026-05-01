@@ -33,3 +33,30 @@ export function updateTargets(
   writeFileSync(path, yaml.dump(current, { lineWidth: -1 }));
   return current;
 }
+
+export function deleteTarget(
+  path: string = "targets.yaml",
+  section: string,
+  key?: string
+): { success: boolean; message: string; targets: Targets } {
+  const current = readTargets(path);
+
+  if (!(section in current)) {
+    return { success: false, message: `Section "${section}" not found`, targets: current };
+  }
+
+  if (key === undefined) {
+    delete current[section];
+    writeFileSync(path, yaml.dump(current, { lineWidth: -1 }));
+    return { success: true, message: `Deleted section "${section}"`, targets: current };
+  }
+
+  const sectionObj = current[section] as Record<string, number | string>;
+  if (!(key in sectionObj)) {
+    return { success: false, message: `Key "${section}.${key}" not found`, targets: current };
+  }
+
+  delete sectionObj[key];
+  writeFileSync(path, yaml.dump(current, { lineWidth: -1 }));
+  return { success: true, message: `Deleted "${section}.${key}"`, targets: current };
+}

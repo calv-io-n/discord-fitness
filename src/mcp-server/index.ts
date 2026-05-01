@@ -6,10 +6,23 @@ import {
   ListResourcesRequestSchema,
   ReadResourceRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
-import { handleLogTool, handleLogBatch, LOG_TOOL_NAMES, type BatchEntry } from "./tools/logging";
+import {
+  handleLogTool,
+  handleLogBatch,
+  handleUpdateEntry,
+  handleDeleteEntry,
+  LOG_TOOL_NAMES,
+  type BatchEntry,
+} from "./tools/logging";
 import { handleQueryDomain, handleGetToday, handleGetSummary } from "./tools/querying";
-import { handleGetTargets, handleUpdateTargets } from "./tools/targets";
-import { getFavoriteFoods, addFavoriteFood, type FavoriteFood } from "./tools/favorites";
+import { handleGetTargets, handleUpdateTargets, handleDeleteTarget } from "./tools/targets";
+import {
+  getFavoriteFoods,
+  addFavoriteFood,
+  updateFavoriteFood,
+  deleteFavoriteFood,
+  type FavoriteFood,
+} from "./tools/favorites";
 import { readFileSync } from "fs";
 
 export function createServer(dataDir: string = "data", targetsPath: string = "targets.yaml") {
@@ -28,13 +41,13 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
           properties: {
             date: { type: "string", description: "YYYY-MM-DD (defaults to today)" },
             exercise: { type: "string", description: "Exercise name, e.g. bench press" },
-            category: { type: "string", description: "Push, Pull, or Legs", enum: ["push", "pull", "legs"] },
+            category: { type: "string", description: "Push, Pull, Legs, or Core", enum: ["push", "pull", "legs", "core"] },
             sets: { type: "number" },
             reps: { type: "number" },
             weight: { type: "number", description: "Weight in lbs" },
             notes: { type: "string", default: "" },
           },
-          required: ["exercise", "sets", "reps", "weight"],
+          required: ["exercise", "category", "sets", "reps", "weight"],
         },
       },
       {
@@ -123,8 +136,57 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
         },
       },
       {
+        name: "log_batch",
+        description: "PREFERRED: Log multiple fitness entries across any domains in a single call. Use this instead of calling individual log tools when the user wants to log more than one thing (e.g., 'log my workout, steps, and breakfast'). Each entry specifies a domain (strength/cardio/steps/nutrition/sleep/weight) and the data for that entry.",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            entries: {
+              type: "array",
+              description: "Array of entries to log",
+              items: {
+                type: "object",
+                properties: {
+                  domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight", "stretching"] },
+                  data: { type: "object", description: "The entry data (same fields as individual log tools)" },
+                },
+                required: ["domain", "data"],
+              },
+            },
+          },
+          required: ["entries"],
+        },
+      },
+      {
+        name: "update_entry",
+        description: "Edit a previously logged fitness entry. Use when the user says 'change', 'edit', 'fix', or 'update' a logged entry — e.g., 'change my breakfast to 600 calories' or 'fix the weight on my last bench press'. First call query_domain to find the entry's _month and _index, then pass them along with the fields to change in 'updates'.",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight", "stretching"] },
+            month: { type: "string", description: "Month key from the entry's _month field, e.g. 2026-04" },
+            index: { type: "number", description: "Row index from the entry's _index field" },
+            updates: { type: "object", description: "Fields to change (only the changed columns; uses same field names as log tools)" },
+          },
+          required: ["domain", "month", "index", "updates"],
+        },
+      },
+      {
+        name: "delete_entry",
+        description: "Delete a previously logged fitness entry. Use when the user says 'delete', 'remove', or 'undo' a logged entry. First call query_domain to find the entry's _month and _index.",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight", "stretching"] },
+            month: { type: "string", description: "Month key from the entry's _month field, e.g. 2026-04" },
+            index: { type: "number", description: "Row index from the entry's _index field" },
+          },
+          required: ["domain", "month", "index"],
+        },
+      },
+      {
         name: "query_domain",
-        description: "Query logged fitness entries for a specific domain (strength, cardio, steps, nutrition, sleep, or weight). Supports optional date range filtering. Use when the user asks to see their logged data, history, or entries for a specific time period.",
+        description: "Query logged fitness entries for a specific domain (strength, cardio, steps, nutrition, sleep, or weight). Supports optional date range filtering. Returned entries include _month and _index fields used to identify rows for update_entry / delete_entry. Use when the user asks to see their logged data, history, or entries for a specific time period.",
         inputSchema: {
           type: "object" as const,
           properties: {
@@ -173,8 +235,20 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
         },
       },
       {
+        name: "delete_target",
+        description: "Delete a single target key, or an entire section if no key is given. Use when the user retires a goal — e.g., 'I'm not tracking carbs anymore' or 'drop the cardio targets'.",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            section: { type: "string", description: "Top-level section, e.g. nutrition, strength, cardio" },
+            key: { type: "string", description: "Optional key inside the section. Omit to delete the whole section." },
+          },
+          required: ["section"],
+        },
+      },
+      {
         name: "get_favorite_foods",
-        description: "Look up favorite/saved foods and their macros. Use when the user asks 'what are my saved foods', 'look up chicken breast', or needs macro info for a food they've saved before. Supports optional search query to filter by name.",
+        description: "Look up favorite/saved foods and their macros. Returns each food with an _index field used by update_favorite_food / delete_favorite_food. Use when the user asks 'what are my saved foods', 'look up chicken breast', or needs macro info for a food they've saved before. Supports optional search query to filter by name.",
         inputSchema: {
           type: "object" as const,
           properties: {
@@ -199,25 +273,29 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
         },
       },
       {
-        name: "log_batch",
-        description: "PREFERRED: Log multiple fitness entries across any domains in a single call. Use this instead of calling individual log tools when the user wants to log more than one thing (e.g., 'log my workout, steps, and breakfast'). Each entry specifies a domain (strength/cardio/steps/nutrition/sleep/weight) and the data for that entry.",
+        name: "update_favorite_food",
+        description: "Edit a saved favorite food (rename, fix macros, change serving). First call get_favorite_foods to find the entry's _index.",
         inputSchema: {
           type: "object" as const,
           properties: {
-            entries: {
-              type: "array",
-              description: "Array of entries to log",
-              items: {
-                type: "object",
-                properties: {
-                  domain: { type: "string", enum: ["strength", "cardio", "steps", "nutrition", "sleep", "weight", "stretching"] },
-                  data: { type: "object", description: "The entry data (same fields as individual log tools)" },
-                },
-                required: ["domain", "data"],
-              },
+            index: { type: "number", description: "_index of the favorite to update" },
+            updates: {
+              type: "object",
+              description: "Fields to change: name, serving, calories, protein, carbs, fat",
             },
           },
-          required: ["entries"],
+          required: ["index", "updates"],
+        },
+      },
+      {
+        name: "delete_favorite_food",
+        description: "Remove a favorite food. First call get_favorite_foods to find the entry's _index.",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            index: { type: "number", description: "_index of the favorite to delete" },
+          },
+          required: ["index"],
         },
       },
     ],
@@ -234,6 +312,22 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
 
     if (LOG_TOOL_NAMES.includes(name)) {
       const result = handleLogTool(name, args as Record<string, unknown>, dataDir);
+      return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
+    }
+
+    if (name === "update_entry") {
+      const result = handleUpdateEntry(
+        args as { domain: string; month: string; index: number; updates: Record<string, unknown> },
+        dataDir,
+      );
+      return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
+    }
+
+    if (name === "delete_entry") {
+      const result = handleDeleteEntry(
+        args as { domain: string; month: string; index: number },
+        dataDir,
+      );
       return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
     }
 
@@ -259,8 +353,20 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
     }
 
     if (name === "add_favorite_food") {
-      const food = args as FavoriteFood;
+      const food = args as unknown as FavoriteFood;
       const result = addFavoriteFood(food, dataDir);
+      return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
+    }
+
+    if (name === "update_favorite_food") {
+      const { index, updates } = args as { index: number; updates: Partial<FavoriteFood> };
+      const result = updateFavoriteFood(index, updates, dataDir);
+      return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
+    }
+
+    if (name === "delete_favorite_food") {
+      const { index } = args as { index: number };
+      const result = deleteFavoriteFood(index, dataDir);
       return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
     }
 
@@ -272,6 +378,11 @@ export function createServer(dataDir: string = "data", targetsPath: string = "ta
     if (name === "update_targets") {
       const { updates } = args as { updates: Record<string, Record<string, number | string>> };
       const result = handleUpdateTargets(updates, targetsPath);
+      return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
+    }
+
+    if (name === "delete_target") {
+      const result = handleDeleteTarget(args as { section: string; key?: string }, targetsPath);
       return { content: [{ type: "text" as const, text: JSON.stringify(result) }] };
     }
 

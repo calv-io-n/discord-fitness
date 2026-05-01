@@ -16,7 +16,7 @@ function getWeekStart(date: Date): string {
   const d = new Date(date);
   const day = d.getDay();
   d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
-  return d.toISOString().slice(0, 10);
+  return d.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
 }
 
 export default function Stretching() {
@@ -46,7 +46,7 @@ export default function Stretching() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
-  const today = now.toISOString().slice(0, 10);
+  const today = now.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
   const weekStart = getWeekStart(now);
 
   // Heatmap data: 1 if stretched that day, 0 if not

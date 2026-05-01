@@ -1,27 +1,26 @@
 date,meal,calories,protein,carbs,fat,notes
-2026-03-24,breakfast,450,35,40,18,eggs and toast
-2026-03-24,lunch,680,52,60,22,chicken rice bowl
-2026-03-24,snack,280,30,15,10,protein shake
-2026-03-24,dinner,520,38,45,20,salmon and veggies
-2026-03-25,breakfast,400,28,45,15,oatmeal with berries
-2026-03-25,lunch,720,48,65,25,burrito bowl
-2026-03-25,snack,200,25,8,8,greek yogurt
-2026-03-25,dinner,580,42,50,18,stir fry chicken
-2026-03-26,breakfast,380,30,35,14,egg whites and avocado toast
-2026-03-26,lunch,650,45,55,24,turkey sandwich
-2026-03-26,snack,250,28,12,9,protein bar
-2026-03-26,dinner,550,40,48,19,grilled chicken salad
-2026-03-27,breakfast,420,32,38,16,scrambled eggs bacon
-2026-03-27,lunch,700,50,62,23,poke bowl
-2026-03-27,snack,180,22,10,6,cottage cheese
-2026-03-27,dinner,600,44,52,21,lean beef and rice
-2026-03-28,breakfast,390,28,42,14,smoothie bowl
-2026-03-28,lunch,660,46,58,22,grilled chicken wrap
-2026-03-28,snack,240,26,14,8,almonds and shake
-2026-03-28,dinner,510,36,44,20,fish tacos
-2026-03-29,breakfast,430,34,36,17,eggs benedict
-2026-03-29,lunch,690,50,60,24,chicken teriyaki bowl
-2026-03-29,snack,260,30,12,9,protein shake banana
-2026-03-30,breakfast,430,34,36,17,eggs benedict
-2026-03-30,lunch,690,50,60,24,chicken teriyaki bowl
-2026-03-30,snack,260,30,12,9,protein shake banana
+2026-03-29,Breakfast,349,41.6,16.4,15.2,
+2026-03-29,Snack,105,1.3,27,0.4,
+2026-03-29,Snack,280,34,28,5,
+2026-03-29,Dinner,1100,132,49,40,
+2026-03-29,Snack,210,2.6,54,0.8,
+2026-03-30,Snack,135,16,6,5,
+2026-03-30,Snack,105,1.3,27,0.4,
+2026-03-30,Snack,140,17,14,2.5,
+2026-03-30,Snack,100,1,19,2.5,
+2026-03-30,Snack,280,32,14,12,
+2026-03-30,Snack,20,4,1,0,
+2026-03-30,Snack,105,1.3,27,0.4,
+2026-03-30,snack,130,17,13,3,Built Puff protein bar x1
+2026-03-30,dinner,405,48,18,15,3 slices turkey crust pizza
+2026-03-30,dinner,215,5,45,1.5,1 cup brown rice
+2026-03-30,snack,168,14,8,9,El Paso taco shell, 55g Crown ground turkey, 10g green onion, 3g Saputo parmesan, 10g Penny's pico de gallo
+2026-03-30,snack,168,14,8,9,El Paso taco shell #2, 55g Crown ground turkey, 10g green onion, 3g Saputo parmesan, 10g Penny's pico de gallo
+2026-03-30,snack,120,30,1,0,Joyburst Protein Soda Max - Rocket Pop flavor
+2026-03-30,snack,168,14,8,9,El Paso taco #3, 55g Crown ground turkey, 10g green onion, 3g Saputo parmesan, 10g Penny's pico de gallo
+2026-03-30,snack,168,14,8,9,El Paso taco #4, 55g Crown ground turkey, 10g green onion, 3g Saputo parmesan, 10g Penny's pico de gallo
+2026-03-31,,105,1.3,27,0.4,
+2026-03-31,,130,17,13,4.5,
+2026-03-31,,792,148,2,18,
+2026-03-31,,60,4,12,0.5,
+2026-03-31,,70,4,4,3,

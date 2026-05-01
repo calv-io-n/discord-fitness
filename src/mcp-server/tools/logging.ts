@@ -1,5 +1,5 @@
 // src/mcp-server/tools/logging.ts
-import { appendEntry, type Domain, type DomainEntry } from "../../csv-store";
+import { appendEntry, updateEntry, deleteEntry, type Domain, type DomainEntry, DOMAINS } from "../../csv-store";
 
 const TOOL_TO_DOMAIN: Record<string, Domain> = {
   log_strength: "strength",
@@ -51,7 +51,7 @@ export function handleLogTool(
     return { success: false, message: `Unknown tool: ${toolName}` };
   }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: process.env.TZ || "America/Vancouver" });
   const normalized = normalizeFields(args);
   const entry = { date: today, ...normalized } as DomainEntry[typeof domain];
 
@@ -87,3 +87,35 @@ export function handleLogBatch(
 }
 
 export const LOG_TOOL_NAMES = Object.keys(TOOL_TO_DOMAIN);
+
+interface UpdateEntryArgs {
+  domain: string;
+  month: string;
+  index: number;
+  updates: Record<string, unknown>;
+}
+
+interface DeleteEntryArgs {
+  domain: string;
+  month: string;
+  index: number;
+}
+
+function isDomain(value: string): value is Domain {
+  return (DOMAINS as readonly string[]).includes(value);
+}
+
+export function handleUpdateEntry(args: UpdateEntryArgs, dataDir: string = "data") {
+  if (!isDomain(args.domain)) {
+    return { success: false, message: `Unknown domain: ${args.domain}` };
+  }
+  const normalized = normalizeFields(args.updates);
+  return updateEntry(args.domain, args.month, args.index, normalized, dataDir);
+}
+
+export function handleDeleteEntry(args: DeleteEntryArgs, dataDir: string = "data") {
+  if (!isDomain(args.domain)) {
+    return { success: false, message: `Unknown domain: ${args.domain}` };
+  }
+  return deleteEntry(args.domain, args.month, args.index, dataDir);
+}

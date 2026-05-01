@@ -88,6 +88,10 @@ html {
     --sidebar-ring: oklch(0.5 0.02 270);
 }
 
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -96,6 +100,6 @@ html {
     @apply bg-background text-foreground antialiased;
   }
   html {
-    @apply font-sans dark;
+    @apply font-sans;
   }
 }
