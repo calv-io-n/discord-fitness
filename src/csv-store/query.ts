@@ -19,6 +19,8 @@ export interface Summary {
   averages: Record<string, number>;
 }
 
+const META_KEYS = new Set(["_month", "_index"]);
+
 export function getSummary(
   domain: Domain,
   dataDir: string = "data",
@@ -29,8 +31,9 @@ export function getSummary(
   if (count === 0) return { count: 0, totals: {}, averages: {} };
 
   const numericKeys: string[] = [];
-  const first = entries[0] as Record<string, unknown>;
+  const first = entries[0] as unknown as Record<string, unknown>;
   for (const [key, val] of Object.entries(first)) {
+    if (META_KEYS.has(key)) continue;
     if (typeof val === "number") numericKeys.push(key);
   }
 
@@ -38,7 +41,7 @@ export function getSummary(
   for (const key of numericKeys) totals[key] = 0;
 
   for (const entry of entries) {
-    const row = entry as Record<string, unknown>;
+    const row = entry as unknown as Record<string, unknown>;
     for (const key of numericKeys) {
       totals[key] += row[key] as number;
     }

@@ -1,1 +1,1 @@
-export { readTargets, updateTargets, type Targets } from "./targets";
+export { readTargets, updateTargets, deleteTarget, type Targets } from "./targets";

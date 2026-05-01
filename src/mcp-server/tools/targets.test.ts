@@ -1,6 +1,6 @@
 // src/mcp-server/tools/targets.test.ts
 import { describe, it, expect, beforeEach, afterEach } from "bun:test";
-import { handleGetTargets, handleUpdateTargets } from "./targets";
+import { handleGetTargets, handleUpdateTargets, handleDeleteTarget } from "./targets";
 import { writeFileSync, mkdirSync, rmSync } from "fs";
 import { join } from "path";
 
@@ -36,5 +36,25 @@ describe("handleUpdateTargets", () => {
     const result = handleUpdateTargets({ nutrition: { calories: 2200 } }, TARGETS_PATH);
     expect(result.nutrition.calories).toBe(2200);
     expect(result.nutrition.protein_g).toBe(180);
+  });
+});
+
+describe("handleDeleteTarget", () => {
+  it("deletes a single key", () => {
+    const result = handleDeleteTarget({ section: "nutrition", key: "protein_g" }, TARGETS_PATH);
+    expect(result.success).toBe(true);
+    expect((result.targets.nutrition as Record<string, unknown>).protein_g).toBeUndefined();
+    expect(result.targets.nutrition.calories).toBe(2500);
+  });
+
+  it("deletes a whole section when key omitted", () => {
+    const result = handleDeleteTarget({ section: "steps" }, TARGETS_PATH);
+    expect(result.success).toBe(true);
+    expect((result.targets as Record<string, unknown>).steps).toBeUndefined();
+  });
+
+  it("returns failure for unknown section", () => {
+    const result = handleDeleteTarget({ section: "bogus" }, TARGETS_PATH);
+    expect(result.success).toBe(false);
   });
 });
