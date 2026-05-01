@@ -10,9 +10,15 @@ import Stretching from "./pages/Stretching";
 import Cardio from "./pages/Cardio";
 import "./index.css";
 
+// Strip trailing slash so "/app/fitness-coach/" becomes "/app/fitness-coach"
+// — react-router expects basename without trailing slash. Vite injects
+// BASE_URL from the `base` config (set from VITE_BASE), so this stays in
+// sync with the build.
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route element={<App />}>
           <Route index element={<Navigate to="/nutrition" replace />} />
