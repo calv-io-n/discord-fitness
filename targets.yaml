@@ -1,19 +1,15 @@
 nutrition:
-  calories: 2400
-  protein: 180
-  carbs: 280
-  fat: 80
-
+  calories: 2050
+  protein: 185
+  carbs: 175
+  fat: 68
 strength:
   bench_press: 225
   squat: 315
   deadlift: 405
-
 steps:
   daily: 10000
-
 sleep:
   hours: 7.5
-
 weight:
-  target: 180
+  target: 212

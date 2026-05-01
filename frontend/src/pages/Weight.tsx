@@ -115,8 +115,8 @@ export default function Weight() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Weight</h1>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold">Weight</h1>
         <div className="flex gap-2">
           <button
             onClick={() => setRange("month")}
@@ -177,7 +177,7 @@ export default function Weight() {
         </CardHeader>
         <CardContent>
           {range === "month" ? (
-            <ResponsiveContainer width="100%" height={350}>
+            <ResponsiveContainer width="100%" height={250}>
               <LineChart data={monthChartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                 <XAxis
@@ -199,7 +199,7 @@ export default function Weight() {
                     borderRadius: "8px",
                     color: "#e4e4e7",
                   }}
-                  formatter={(value: number, name: string) => [
+                  formatter={(value, name) => [
                     `${value} lbs`,
                     name === "trend" ? "7-day avg" : "Weight",
                   ]}
@@ -235,7 +235,7 @@ export default function Weight() {
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <ResponsiveContainer width="100%" height={350}>
+            <ResponsiveContainer width="100%" height={250}>
               <LineChart data={yearChartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
                 <XAxis
@@ -257,7 +257,7 @@ export default function Weight() {
                     borderRadius: "8px",
                     color: "#e4e4e7",
                   }}
-                  formatter={(value: number) => [`${value} lbs`, "Avg Weight"]}
+                  formatter={(value) => [`${value} lbs`, "Avg Weight"]}
                 />
                 <Line
                   type="monotone"

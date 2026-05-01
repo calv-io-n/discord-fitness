@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from "bun:test";
-import { readTargets, updateTargets } from "./targets";
+import { readTargets, updateTargets, deleteTarget } from "./targets";
 import { writeFileSync, mkdirSync, rmSync, readFileSync } from "fs";
 import { join } from "path";
 
@@ -55,5 +55,38 @@ describe("updateTargets", () => {
     expect(targets.nutrition.calories).toBe(2200);
     expect(targets.nutrition.protein_g).toBe(200);
     expect(targets.steps.daily).toBe(12000);
+  });
+});
+
+describe("deleteTarget", () => {
+  it("deletes a single key", () => {
+    const result = deleteTarget(TARGETS_PATH, "nutrition", "protein_g");
+    expect(result.success).toBe(true);
+    const targets = readTargets(TARGETS_PATH);
+    expect(targets.nutrition.calories).toBe(2500);
+    expect((targets.nutrition as Record<string, unknown>).protein_g).toBeUndefined();
+  });
+
+  it("deletes a whole section when no key is given", () => {
+    const result = deleteTarget(TARGETS_PATH, "weight");
+    expect(result.success).toBe(true);
+    const targets = readTargets(TARGETS_PATH);
+    expect((targets as Record<string, unknown>).weight).toBeUndefined();
+  });
+
+  it("returns failure for missing section", () => {
+    const result = deleteTarget(TARGETS_PATH, "nonexistent");
+    expect(result.success).toBe(false);
+  });
+
+  it("returns failure for missing key", () => {
+    const result = deleteTarget(TARGETS_PATH, "nutrition", "missing");
+    expect(result.success).toBe(false);
+  });
+
+  it("persists the deletion to disk", () => {
+    deleteTarget(TARGETS_PATH, "nutrition", "protein_g");
+    const content = readFileSync(TARGETS_PATH, "utf-8");
+    expect(content).not.toContain("protein_g");
   });
 });

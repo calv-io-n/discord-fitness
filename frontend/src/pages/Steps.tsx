@@ -17,7 +17,7 @@ function getWeekStart(date: Date): string {
   const d = new Date(date);
   const day = d.getDay();
   d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
-  return d.toISOString().slice(0, 10);
+  return d.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
 }
 
 function getDayOfWeek(date: Date): number {
@@ -59,7 +59,7 @@ export default function Steps() {
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
-  const today = now.toISOString().slice(0, 10);
+  const today = now.toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
   const weekStart = getWeekStart(now);
   const dayOfWeek = getDayOfWeek(now);
   const totalDaysInMonth = daysInMonth(year, month);
@@ -72,20 +72,23 @@ export default function Steps() {
   const weekTotal = weekEntries.reduce((s, e) => s + (e.steps || 0), 0);
   const weeklyTarget = dailyTarget * 7;
   const weekDaysRemaining = 7 - dayOfWeek;
-  const weekDaysElapsed = dayOfWeek;
+  const todaySteps = entries.filter((e) => e.date === today).reduce((s, e) => s + (e.steps || 0), 0);
+  const completedWeekDays = dayOfWeek - 1;
+  const completedWeekSteps = weekTotal - todaySteps;
   const weeklyOnTrack =
-    weekDaysElapsed > 0
-      ? (weekTotal / weekDaysElapsed) * 7 >= weeklyTarget
+    completedWeekDays > 0
+      ? (completedWeekSteps / completedWeekDays) * 7 >= weeklyTarget
       : true;
 
   // Monthly calculations
   const monthTotal = entries.reduce((s, e) => s + (e.steps || 0), 0);
   const monthlyTarget = dailyTarget * totalDaysInMonth;
   const monthDaysRemaining = totalDaysInMonth - dayOfMonth;
-  const monthDaysElapsed = dayOfMonth;
+  const completedMonthDays = dayOfMonth - 1;
+  const completedMonthSteps = monthTotal - todaySteps;
   const monthlyOnTrack =
-    monthDaysElapsed > 0
-      ? (monthTotal / monthDaysElapsed) * totalDaysInMonth >= monthlyTarget
+    completedMonthDays > 0
+      ? (completedMonthSteps / completedMonthDays) * totalDaysInMonth >= monthlyTarget
       : true;
 
   // Build bar chart data: one entry per day of the month
@@ -105,7 +108,7 @@ export default function Steps() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Steps</h1>
+      <h1 className="text-xl sm:text-2xl font-bold">Steps</h1>
 
       {/* Progress Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -143,7 +146,7 @@ export default function Steps() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={350}>
+          <ResponsiveContainer width="100%" height={250}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#1e2030" />
               <XAxis
@@ -167,8 +170,8 @@ export default function Steps() {
                   borderRadius: "8px",
                   color: "#e4e4e7",
                 }}
-                formatter={(value: number) => [
-                  value.toLocaleString() + " steps",
+                formatter={(value) => [
+                  Number(value).toLocaleString() + " steps",
                   "Steps",
                 ]}
               />

@@ -1,6 +1,6 @@
 // src/csv-store/index.ts
-export { appendEntry } from "./writer";
-export { readEntries } from "./reader";
+export { appendEntry, updateEntry, deleteEntry } from "./writer";
+export { readEntries, readEntriesWithMeta, type EntryWithMeta } from "./reader";
 export { getToday, getSummary, type Summary } from "./query";
 export {
   DOMAINS,

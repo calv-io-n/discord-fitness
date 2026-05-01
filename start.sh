@@ -1,17 +1,17 @@
 #!/bin/bash
 # Start the Claude Code Discord agent in a tmux session
-# The MCP server and dashboard run independently.
+# Runs as agent-fitness so the Discord plugin reads the right token.
 
 SESSION="fitness-agent"
+DIR="$(cd "$(dirname "$0")" && pwd)"
+USER="agent-fitness"
 
 # Kill existing session if present
 tmux kill-session -t "$SESSION" 2>/dev/null
 
-# Create new session
-tmux new-session -d -s "$SESSION" -n "agent"
-
-# Start Claude Code connected to Discord
-tmux send-keys -t "$SESSION:agent" "claude --channel discord" Enter
+# Start as agent-fitness
+tmux new-session -d -s "$SESSION" -n "agent" \
+  "sudo -u $USER bash -c \"cd '$DIR' && claude --channels plugin:discord@claude-plugins-official\""
 
 echo "Started fitness agent in tmux session '$SESSION'"
 echo "Attach with: tmux attach -t $SESSION"

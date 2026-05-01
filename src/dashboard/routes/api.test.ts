@@ -2,7 +2,8 @@
 import { describe, it, expect, beforeEach, afterEach } from "bun:test";
 import { Elysia } from "elysia";
 import { apiRoutes } from "./api";
-import { appendEntry, type StepsEntry, type NutritionEntry } from "../../csv-store";
+import { appendEntry } from "../../csv-store";
+import type { StepsEntry, NutritionEntry } from "../../csv-store";
 import { writeFileSync, mkdirSync, rmSync } from "fs";
 import { join } from "path";
 
@@ -93,5 +94,125 @@ describe("GET /api/:domain/summary", () => {
     expect(res.status).toBe(200);
     expect(body.count).toBe(2);
     expect(body.totals.calories).toBe(1200);
+  });
+});
+
+describe("entry CRUD", () => {
+  it("POST /api/:domain creates an entry", async () => {
+    const app = createApp();
+    const res = await app.handle(
+      new Request("http://localhost/api/steps", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: "2026-04-12", steps: 8000, notes: "" }),
+      }),
+    );
+    const body = await res.json();
+    expect(body.success).toBe(true);
+
+    const list = await (await app.handle(new Request("http://localhost/api/steps/2026/04"))).json();
+    expect(list.entries).toHaveLength(1);
+    expect(list.entries[0].steps).toBe(8000);
+  });
+
+  it("PATCH /api/:domain/:month/:index updates an entry", async () => {
+    appendEntry("steps", { date: "2026-04-12", steps: 8000, notes: "" } as StepsEntry, TEST_DATA_DIR);
+
+    const app = createApp();
+    const res = await app.handle(
+      new Request("http://localhost/api/steps/2026-04/0", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ steps: 9500 }),
+      }),
+    );
+    const body = await res.json();
+    expect(body.success).toBe(true);
+
+    const list = await (await app.handle(new Request("http://localhost/api/steps/2026/04"))).json();
+    expect(list.entries[0].steps).toBe(9500);
+  });
+
+  it("DELETE /api/:domain/:month/:index removes an entry", async () => {
+    appendEntry("steps", { date: "2026-04-12", steps: 8000, notes: "" } as StepsEntry, TEST_DATA_DIR);
+
+    const app = createApp();
+    const res = await app.handle(
+      new Request("http://localhost/api/steps/2026-04/0", { method: "DELETE" }),
+    );
+    const body = await res.json();
+    expect(body.success).toBe(true);
+
+    const list = await (await app.handle(new Request("http://localhost/api/steps/2026/04"))).json();
+    expect(list.entries).toHaveLength(0);
+  });
+});
+
+describe("favorites HTTP CRUD", () => {
+  it("supports add, list, update, delete", async () => {
+    const app = createApp();
+
+    const add = await app.handle(
+      new Request("http://localhost/api/favorites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "rice", serving: "1 cup", calories: 200, protein: 4, carbs: 45, fat: 0.5 }),
+      }),
+    );
+    expect((await add.json()).success).toBe(true);
+
+    const list = await (await app.handle(new Request("http://localhost/api/favorites"))).json();
+    expect(list.foods).toHaveLength(1);
+    expect(list.foods[0]._index).toBe(0);
+
+    const patch = await app.handle(
+      new Request("http://localhost/api/favorites/0", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ calories: 220 }),
+      }),
+    );
+    expect((await patch.json()).success).toBe(true);
+
+    const del = await app.handle(
+      new Request("http://localhost/api/favorites/0", { method: "DELETE" }),
+    );
+    expect((await del.json()).success).toBe(true);
+
+    const final = await (await app.handle(new Request("http://localhost/api/favorites"))).json();
+    expect(final.foods).toHaveLength(0);
+  });
+});
+
+describe("targets HTTP CRUD", () => {
+  it("PATCH updates and DELETE removes a target key", async () => {
+    const app = createApp();
+
+    const patch = await app.handle(
+      new Request("http://localhost/api/targets", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ updates: { nutrition: { calories: 2300 } } }),
+      }),
+    );
+    const updated = await patch.json();
+    expect(updated.nutrition.calories).toBe(2300);
+
+    const del = await app.handle(
+      new Request("http://localhost/api/targets/nutrition/protein", { method: "DELETE" }),
+    );
+    const delBody = await del.json();
+    expect(delBody.success).toBe(true);
+    expect(delBody.targets.nutrition.protein).toBeUndefined();
+  });
+
+  it("DELETE without key removes whole section", async () => {
+    const app = createApp();
+    const res = await app.handle(
+      new Request("http://localhost/api/targets/steps", { method: "DELETE" }),
+    );
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.targets.steps).toBeUndefined();
   });
 });

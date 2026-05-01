@@ -1,0 +1,36 @@
+services:
+  api:
+    build:
+      context: .
+      target: api
+    environment:
+      - PORT=3000
+      - TZ=America/Vancouver
+    volumes:
+      - ./data:/app/data
+      - ./targets.yaml:/app/targets.yaml
+    restart: unless-stopped
+
+  mcp:
+    build:
+      context: .
+      target: mcp
+    ports:
+      - "30501:3001"
+    environment:
+      - MCP_PORT=3001
+      - TZ=America/Vancouver
+    volumes:
+      - ./data:/app/data
+      - ./targets.yaml:/app/targets.yaml
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      target: web
+    ports:
+      - "30004:80"
+    depends_on:
+      - api
+    restart: unless-stopped
