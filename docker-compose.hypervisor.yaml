@@ -1,0 +1,95 @@
+services:
+  web:
+    image: oven/bun:1
+    working_dir: /app/frontend
+    command: ["sh", "-c", "bun install && bun run build && bunx vite preview --host 0.0.0.0 --port 3000"]
+    ports:
+      - "${PORT_BASE}:3000"
+    environment:
+      VITE_API_TARGET: "http://dashboard:3000"
+      # Must match the operator-chosen route in claude-hypervisor's
+      # hypervisor.personal.yaml expose `route:` for service web.
+      # Trailing slash required by vite for asset URL rewriting.
+      VITE_BASE: "/app/fitness-coach/"
+      TZ: "${TZ:-America/Vancouver}"
+    volumes:
+      - ./frontend:/app/frontend:rw
+      - vibe-fitness-frontend-node-modules:/app/frontend/node_modules
+    networks: [hyperclaude]
+    restart: unless-stopped
+    depends_on:
+      - dashboard
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3000/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  dashboard:
+    image: oven/bun:1
+    working_dir: /app
+    command: ["sh", "-c", "bun install && bun run src/dashboard/run.ts"]
+    expose:
+      - "3000"
+    environment:
+      PORT: "3000"
+      TZ: "${TZ:-America/Vancouver}"
+      VIBE_DB_PATH: "/app/data/fitness.db"
+    volumes:
+      - .:/app:rw
+      - vibe-fitness-node-modules:/app/node_modules
+    networks: [hyperclaude]
+    restart: unless-stopped
+
+  mcp:
+    # Wrap the stdio MCP server with `supergateway` (supercorp/supergateway)
+    # — the same npm wrapper that exposes obsidian-mcp.neonware.cloud and
+    # has been verified to work with claude.ai mobile + web. Unlike
+    # mcp-proxy, supergateway emits SSE in the exact framing claude.ai's
+    # custom-connector validator accepts (GET /sse stream + POST /message
+    # for messages). The proxy spawns the stdio child once per process.
+    image: oven/bun:1
+    working_dir: /app
+    # Stateless streamable HTTP: --stateful tracks one transport per session
+    # and the MCP SDK rejects a second concurrent GET /sse on the same session
+    # ('Conflict: Only one SSE stream is allowed per session'). supergateway's
+    # onclose handler then kills the stdio child, dropping in-flight tool calls.
+    # claude.ai opens parallel streams in normal use, so --stateful is unsafe.
+    # Fitness tools persist to SQLite, so per-request spawn is fine.
+    command: ["sh", "-c", "bun install && bunx supergateway --stdio 'bun run src/mcp-server/stdio.ts' --port 3001 --outputTransport streamableHttp --streamableHttpPath /sse"]
+    ports:
+      - "${PORT_BASE_1}:3001"
+    environment:
+      TZ: "${TZ:-America/Vancouver}"
+      VIBE_DB_PATH: "/app/data/fitness.db"
+    volumes:
+      - .:/app:rw
+      - vibe-fitness-node-modules:/app/node_modules
+    networks: [hyperclaude]
+    restart: unless-stopped
+
+  backup:
+    image: alpine:3.20
+    command: ["/bin/sh", "/app/scripts/backup-loop.sh"]
+    environment:
+      TZ: "${TZ:-America/Vancouver}"
+      DB_PATH: "/app/data/fitness.db"
+      BACKUP_DIR: "/app/data/backups"
+      # Operator-controlled cadence — set in claude-hypervisor's
+      # hypervisor.personal.yaml `backup:` block, propagated via
+      # reconciler env. Defaults keep this compose runnable standalone.
+      BACKUP_INTERVAL_SECONDS: "${BACKUP_INTERVAL_SECONDS:-86400}"
+      BACKUP_RETENTION_DAYS: "${BACKUP_RETENTION_DAYS:-30}"
+    volumes:
+      - .:/app:rw
+    networks: [hyperclaude]
+    restart: unless-stopped
+
+volumes:
+  vibe-fitness-node-modules:
+  vibe-fitness-frontend-node-modules:
+
+networks:
+  hyperclaude:
+    external: true
